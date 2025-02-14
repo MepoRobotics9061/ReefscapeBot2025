@@ -4,9 +4,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.revrobotics.spark.SparkMax;
 
-import java.beans.Encoder;
-
-
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.Sendable;
