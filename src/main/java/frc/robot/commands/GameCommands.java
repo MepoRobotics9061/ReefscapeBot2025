@@ -10,6 +10,8 @@ import frc.robot.subsystems.RobotElevator;
 import frc.robot.subsystems.RobotCamera;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.LimeLightCoralPrepCommand;
+import frc.robot.commands.RotateUntil180Command;
+
 
 public class GameCommands {
 
@@ -96,6 +98,10 @@ public class GameCommands {
       () -> horizontal,
       () -> rotate,
       () -> true);
+  }
+
+  public Command driveRotateUntil180Command(double rotateAmount){
+    return new RotateUntil180Command(s_Swerve);
   }
 
   public Command centerATagCommand(){

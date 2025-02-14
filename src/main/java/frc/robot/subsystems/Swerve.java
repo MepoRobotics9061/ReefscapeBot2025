@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.RobotCamera;
@@ -88,6 +89,10 @@ public class Swerve extends SubsystemBase {
     drive(new Translation2d(-(15 - m_robotCamera.tagArea)/30, m_robotCamera.tagX/20), /*gyroATagSpinAmount*/ 0, false, true);
   }
 
+  public void rotateUntilVoid(double rotateAmount){
+    drive(new Translation2d(0, 0), gyroValue - rotateAmount, false, true);
+  }
+
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
@@ -114,9 +119,9 @@ public class Swerve extends SubsystemBase {
     return states;
   }
 
-  // public void zeroGyro() {
-  //   return this.run(() -> {gyro.zeroYaw();});
-  // }
+  public Command zeroGyro() {
+    return this.run(() -> {gyro.zeroYaw();});
+  }
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
@@ -141,7 +146,7 @@ public class Swerve extends SubsystemBase {
     gyroValue = gyro.getYaw() + 180;
 
     SmartDashboard.putNumber(
-      "Gyro", gyro.getYaw() + 180
+      "Gyro", gyroValue
       );
 
     double errorAmount = m_robotCamera.spinAmount - gyroValue;

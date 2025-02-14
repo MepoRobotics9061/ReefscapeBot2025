@@ -89,6 +89,10 @@ public class RobotContainer {
             () -> 0,
             () -> false));
 
+    driver.button(8).onTrue(
+      s_Swerve.zeroGyro()
+    );
+
     driver.button(5).whileTrue(
       m_gameCommands.runCoralIntakeCommand(1)
     );

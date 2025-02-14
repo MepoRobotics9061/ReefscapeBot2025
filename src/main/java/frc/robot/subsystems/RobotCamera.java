@@ -22,6 +22,8 @@ public class RobotCamera extends SubsystemBase {
   NetworkTableEntry ta;
   NetworkTableEntry tid;
 
+  double tagIDSave = -1;
+
 
   public RobotCamera() {
   }
@@ -47,6 +49,11 @@ public class RobotCamera extends SubsystemBase {
     tagArea = ta.getDouble(0.0);
     tagID = tid.getDouble(0.0);
 
+    if (tagID != -1){
+      tagIDSave = tagID;
+    } else {
+      tagID = tagIDSave;}
+
     SmartDashboard.putNumber("Tag X", tagX);
     SmartDashboard.putNumber("Tag Y", tagY);
     SmartDashboard.putNumber("Tag Area", tagArea);
@@ -58,13 +65,13 @@ public class RobotCamera extends SubsystemBase {
 
     SmartDashboard.putString("Team Color", teamCol);
 
-    if (tagID == 1 || tagID == 9 || tagID == 19) {
+    if (tagID == 1) {
       if (teamCol == "r") {
         spinAmount = 225;
       } else {
         spinAmount = 45;
       }
-    } else if (tagID == 2 || tagID == 11 || tagID == 17) {
+    } else if (tagID == 2) {
       if (teamCol == "r") {
         spinAmount = 135;
       } else {
@@ -84,21 +91,45 @@ public class RobotCamera extends SubsystemBase {
       }
     } else if (tagID == 6 || tagID == 13 || tagID == 22) {
       if (teamCol == "r") {
-        spinAmount = 45;
+        spinAmount = 60;
       } else {
-        spinAmount = 225;
+        spinAmount = 240;
       }
     } else if (tagID == 8 || tagID == 12 || tagID == 20) {
       if (teamCol == "r") {
-        spinAmount = 315;
+        spinAmount = 300;
       } else {
-        spinAmount = 135;
+        spinAmount = 120;
       }
     } else if (tagID == 10 || tagID == 14 || tagID == 15 || tagID == 18) {
       if (teamCol == "r") {
         spinAmount = 180;
       } else {
         spinAmount = 0;
+      }
+    } else if (tagID == 9 || tagID == 19) {
+      if (teamCol == "r") {
+        spinAmount = 60;
+      } else {
+        spinAmount = 240;
+      }
+    } else if (tagID == 11 || tagID == 17) {
+      if (teamCol == "r") {
+        spinAmount = 240;
+      } else {
+        spinAmount = 60;
+      }
+    } else if (tagID == 12) {
+      if (teamCol == "r"){
+        spinAmount = 315;
+      } else {
+        spinAmount = 135;
+      }
+    } else if (tagID == 13) {
+      if (teamCol == "r"){
+        spinAmount = 45;
+      } else {
+        spinAmount = 225;
       }
     } else if (tagID == 16) {
         if (teamCol == "r") {
