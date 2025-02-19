@@ -87,12 +87,20 @@ public class RobotContainer {
       s_Swerve.zeroGyro()
     );
 
-    operator.button(4).onTrue(
-      m_gameCommands.pivotToCommand(.1, .5)
-    );
-
     operator.button(1).onTrue(
       m_gameCommands.pivotToCommand(.1, -20)
+    );
+
+    operator.button(3).onTrue(
+      m_gameCommands.pivotToCommand(.1, -15)
+    );
+
+    operator.button(4).onTrue(
+      m_gameCommands.pivotToCommand(.1, -10)
+    );
+
+    operator.button(2).onTrue(
+      m_gameCommands.pivotToCommand(.1, -5)
     );
 
     operator.povUp().whileTrue(
