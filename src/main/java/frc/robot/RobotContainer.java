@@ -5,7 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.exampleAuto;
@@ -29,6 +29,8 @@ import frc.robot.subsystems.RobotCamera;
 public class RobotContainer {
   /* Controllers */
   private final CommandJoystick driver = new CommandJoystick(0);
+
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   private final GameCommands m_gameCommands;
 
@@ -81,39 +83,47 @@ public class RobotContainer {
 
     //zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    driver.button(8).whileTrue(
-      new TeleopSwerve(
-            s_Swerve,
-            () -> .5,
-            () -> 0,
-            () -> 0,
-            () -> false));
-
-    driver.button(8).onTrue(
+    driver.button(3).onTrue(
       s_Swerve.zeroGyro()
     );
 
-    driver.button(5).whileTrue(
+    operator.button(4).onTrue(
+      m_gameCommands.pivotToCommand(.1, .5)
+    );
+
+    operator.button(1).onTrue(
+      m_gameCommands.pivotToCommand(.1, -20)
+    );
+
+    operator.povUp().whileTrue(
+      m_gameCommands.elevatorUpCommand(1)
+    );
+
+    operator.povDown().whileTrue(
+      m_gameCommands.elevatorDownCommand(1)
+    );
+
+    operator.button(5).whileTrue(
       m_gameCommands.runCoralIntakeCommand(1)
     );
 
-    driver.button(1).whileTrue(
+    operator.rightBumper().whileTrue(
       m_gameCommands.runCoralLaunchCommand(1)
     );
     
-    driver.button(6).whileTrue(
+    operator.button(6).whileTrue(
       m_gameCommands.runAlgaeIntakeCommand(1)
     );
 
-    driver.button(2).whileTrue(
+    operator.leftBumper().whileTrue(
       m_gameCommands.runAlgaeLaunchCommand(1)
     );
 
-    driver.button(7).whileTrue(
+    driver.button(11).whileTrue(
       m_gameCommands.centerATagCommand()
     );
 
-    driver.button(9).whileTrue(
+    driver.button(12).whileTrue(
       m_gameCommands.coralPrepCommand()
     );
   }

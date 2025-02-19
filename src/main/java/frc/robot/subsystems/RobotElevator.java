@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.Sendable;
@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RobotElevator extends SubsystemBase {
 
-    SparkMax elevatorWheel;
-    // Encoder encoder;
-    // RelativeEncoder encoderDistance;
+  SparkMax elevatorWheel;
+  AbsoluteEncoder elevatorAbsEncoder;
+  double encoderDistance;
 
     public RobotElevator() {
-    final int wheelDeviceID = 15;
+    final int wheelDeviceID = 13;
     elevatorWheel = new SparkMax(wheelDeviceID, MotorType.kBrushless);
-        
+    elevatorAbsEncoder = elevatorWheel.getAbsoluteEncoder();
     };
 
   public Command elevatorUp(double speed) {
@@ -56,7 +56,7 @@ public class RobotElevator extends SubsystemBase {
   
   @Override
   public void periodic() {
-    // encoderDistance = elevatorWheel.getEncoder();
-    // SmartDashboard.putData("Elevator Encoder", (Sendable) encoderDistance);
+    encoderDistance = elevatorAbsEncoder.getPosition();
+    SmartDashboard.putNumber("Elevator Encoder", encoderDistance);
   }
 }

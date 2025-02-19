@@ -75,11 +75,15 @@ public class GameCommands {
     return m_robotAlgae.launch(speed);
   }
 
-  public Command moveUpCommand(double speed) {
+  public Command pivotToCommand(double speed, double desiredValue) {
+    return m_robotCoralPivot.moveTo(speed, desiredValue);
+  }
+
+  public Command pivotUpCommand(double speed) {
     return m_robotCoralPivot.moveUp(speed);
   }
 
-  public Command moveDownCommand(double speed) {
+  public Command pivotDownCommand(double speed) {
     return m_robotCoralPivot.moveDown(speed);
   }
 

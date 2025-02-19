@@ -13,8 +13,8 @@ public class RobotCoral extends SubsystemBase {
   SparkMax rightWheel;
 
   public RobotCoral() {
-    final int leftWheelDeviceID = 9;
-    final int rightWheelDeviceID = 10;
+    final int leftWheelDeviceID = 10;
+    final int rightWheelDeviceID = 11;
     leftWheel = new SparkMax(leftWheelDeviceID, MotorType.kBrushless);
     rightWheel = new SparkMax(rightWheelDeviceID, MotorType.kBrushless);
   }
