@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,7 +71,7 @@ public class RobotContainer {
     //        () -> robotCentric.get()));
     () -> false));
 
-    m_robotCoralPivot.setDefaultCommand(m_robotCoralPivot.moveTo(SmartDashboard.getNumber("Pivot Speed", 0), SmartDashboard.getNumber("Pivot Point", 0)));
+    m_robotCoralPivot.setDefaultCommand(m_robotCoralPivot.pivotTo(SmartDashboard.getNumber("Pivot Speed", 0), SmartDashboard.getNumber("Pivot Point", 0)));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -108,7 +109,7 @@ public class RobotContainer {
     );
 
     operator.button(7).onTrue(
-      m_gameCommands.changePivotPointCommand(.1)
+      m_gameCommands.changePivotPointCommand(-.1)
     );
 
     operator.button(8).onTrue(

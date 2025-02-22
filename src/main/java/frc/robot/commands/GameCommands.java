@@ -76,7 +76,7 @@ public class GameCommands {
   }
 
   public Command pivotToCommand(double speed, double desiredValue) {
-    return m_robotCoralPivot.moveTo(speed, desiredValue);
+    return m_robotCoralPivot.pivotTo(speed, desiredValue);
   }
 
   public Command setPivotCommand(double speed, double pivotPoint) {
@@ -88,11 +88,11 @@ public class GameCommands {
   }
 
   public Command pivotUpCommand(double speed) {
-    return m_robotCoralPivot.moveUp(speed);
+    return m_robotCoralPivot.pivotUp(speed);
   }
 
   public Command pivotDownCommand(double speed) {
-    return m_robotCoralPivot.moveDown(speed);
+    return m_robotCoralPivot.pivotDown(speed);
   }
 
   public Command elevatorUpCommand(double speed) {

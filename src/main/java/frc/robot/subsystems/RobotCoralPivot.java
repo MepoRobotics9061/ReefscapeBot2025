@@ -22,7 +22,7 @@ public class RobotCoralPivot extends SubsystemBase {
     pivotEncoder = pivotWheel.getEncoder();
     }
 
-  public Command moveTo(double speed, double desiredValue) {
+  public Command pivotTo(double speed, double desiredValue) {
     return this.run(
         () -> {
           setPivotSpeed(speed * (-pivotEncoderValue + desiredValue));
@@ -47,7 +47,7 @@ public class RobotCoralPivot extends SubsystemBase {
         );
       }
 
-  public Command moveUp(double speed) {
+  public Command pivotUp(double speed) {
     return this.runEnd(
         () -> {
           setPivotSpeed(speed);
@@ -58,7 +58,7 @@ public class RobotCoralPivot extends SubsystemBase {
       );
   }
 
-  public Command moveDown(double speed) {
+  public Command pivotDown(double speed) {
     return this.runEnd(
         () -> {
           setPivotSpeed(-speed);

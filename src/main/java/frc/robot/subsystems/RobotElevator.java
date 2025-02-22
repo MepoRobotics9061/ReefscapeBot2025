@@ -1,61 +1,84 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+// import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.AbsoluteEncoder;
-// import com.revrobotics.RelativeEncoder;
 
-// import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public class RobotElevator extends SubsystemBase {
 
   SparkMax elevatorWheel;
-  AbsoluteEncoder elevatorAbsEncoder;
-  double encoderDistance;
 
-    public RobotElevator() {
-    final int wheelDeviceID = 13;
-    elevatorWheel = new SparkMax(wheelDeviceID, MotorType.kBrushless);
-    elevatorAbsEncoder = elevatorWheel.getAbsoluteEncoder();
-    };
+  private RelativeEncoder elevatorEncoder;
+
+  private double elevatorEncoderValue;
+
+  public RobotElevator() {
+    final int pivotWheelDeviceID = 9;
+    elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
+    elevatorEncoder = elevatorWheel.getEncoder();
+    }
+
+  public Command moveElevatorTo(double speed, double desiredValue) {
+    return this.run(
+        () -> {
+          setElevatorSpeed(speed * (-elevatorEncoderValue + desiredValue));
+        }
+      ).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+    }
+
+    public Command setPivotCommand(double speed, double elevatorPoint) {
+      return this.run(
+          () -> {
+            SmartDashboard.putNumber("Pivot Speed", speed);
+            SmartDashboard.putNumber("Elevator Point", elevatorPoint);
+          }
+        );
+      }
+
+    public Command changeElevatorPointCommand(double elevatorPoint) {
+      return this.run(
+          () -> {
+            SmartDashboard.putNumber("Elevator Point", elevatorPoint + SmartDashboard.getNumber("Elevator Point", 0));
+          }
+        );
+      }
 
   public Command elevatorUp(double speed) {
     return this.runEnd(
         () -> {
-          setWheelSpeed(-speed);
+          setElevatorSpeed(speed);
         },
         () -> {
           stop();
         }
-    );
+      );
   }
 
   public Command elevatorDown(double speed) {
     return this.runEnd(
         () -> {
-          setWheelSpeed(speed);
+          setElevatorSpeed(-speed);
         },
         () -> {
           stop();
         }
-    );
+      );
   }
 
-  public void setWheelSpeed(double speed) {
+  public void setElevatorSpeed(double speed) {
     elevatorWheel.set(speed);
   }
 
   public void stop() {
     elevatorWheel.set(0);
   }
-  
-  @Override
-  public void periodic() {
-    encoderDistance = elevatorAbsEncoder.getPosition();
-    SmartDashboard.putNumber("Elevator Encoder", encoderDistance);
+
+  @Override public void periodic() {
+    elevatorEncoderValue = elevatorEncoder.getPosition();
+    SmartDashboard.putNumber("Pivot Encoder", elevatorEncoderValue);
   }
 }
