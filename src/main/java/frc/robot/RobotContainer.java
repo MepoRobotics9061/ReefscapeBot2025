@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -47,6 +48,7 @@ public class RobotContainer {
 
   private final Swerve s_Swerve = new Swerve(m_robotCamera);
 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -68,6 +70,8 @@ public class RobotContainer {
     //        () -> robotCentric.get()));
     () -> false));
 
+    m_robotCoralPivot.setDefaultCommand(m_robotCoralPivot.moveTo(SmartDashboard.getNumber("Pivot Speed", 0), SmartDashboard.getNumber("Pivot Point", 0)));
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -88,19 +92,27 @@ public class RobotContainer {
     );
 
     operator.button(1).onTrue(
-      m_gameCommands.pivotToCommand(.1, -20)
+      m_gameCommands.setPivotCommand(.1, -20)
     );
 
     operator.button(3).onTrue(
-      m_gameCommands.pivotToCommand(.1, -15)
+      m_gameCommands.setPivotCommand(.1, -15)
     );
 
     operator.button(4).onTrue(
-      m_gameCommands.pivotToCommand(.1, -10)
+      m_gameCommands.setPivotCommand(.1, -10)
     );
 
     operator.button(2).onTrue(
-      m_gameCommands.pivotToCommand(.1, -5)
+      m_gameCommands.setPivotCommand(.1, -5)
+    );
+
+    operator.button(7).onTrue(
+      m_gameCommands.changePivotPointCommand(.1)
+    );
+
+    operator.button(8).onTrue(
+      m_gameCommands.changePivotPointCommand(.1)
     );
 
     operator.povUp().whileTrue(
@@ -144,19 +156,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return new exampleAuto(s_Swerve);
-    // return DriveCommands.driveOne(
-    //   s_Swerve,
-    //   () -> .3,
-    //   () -> 0,
-    //   () -> 0,
-    //   () -> true)
-    // .withTimeout(5)
-    // .andThen(DriveCommands.driveOne(    
-    //   s_Swerve,
-    //   () -> -.3,
-    //   () -> 0,
-    //   () -> 0,
-    //   () -> true));
+
   }
 
 }

@@ -1,10 +1,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.AbsoluteEncoder;
+// import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +29,23 @@ public class RobotCoralPivot extends SubsystemBase {
         }
       ).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
     }
+
+    public Command setPivotCommand(double speed, double pivotPoint) {
+      return this.run(
+          () -> {
+            SmartDashboard.putNumber("Pivot Speed", speed);
+            SmartDashboard.putNumber("Pivot Point", pivotPoint);
+          }
+        );
+      }
+
+    public Command changePivotPointCommand(double pivotPoint) {
+      return this.run(
+          () -> {
+            SmartDashboard.putNumber("Pivot Point", pivotPoint + SmartDashboard.getNumber("Pivot Point", 0));
+          }
+        );
+      }
 
   public Command moveUp(double speed) {
     return this.runEnd(
