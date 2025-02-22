@@ -33,7 +33,7 @@ public class RobotElevator extends SubsystemBase {
     public Command setPivotCommand(double speed, double elevatorPoint) {
       return this.run(
           () -> {
-            SmartDashboard.putNumber("Pivot Speed", speed);
+            SmartDashboard.putNumber("Elevator Speed", speed);
             SmartDashboard.putNumber("Elevator Point", elevatorPoint);
           }
         );
@@ -79,6 +79,6 @@ public class RobotElevator extends SubsystemBase {
 
   @Override public void periodic() {
     elevatorEncoderValue = elevatorEncoder.getPosition();
-    SmartDashboard.putNumber("Pivot Encoder", elevatorEncoderValue);
+    SmartDashboard.putNumber("Elevator Encoder", elevatorEncoderValue);
   }
 }
