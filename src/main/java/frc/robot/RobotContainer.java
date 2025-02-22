@@ -21,9 +21,12 @@ import frc.robot.subsystems.RobotElevator;
 import frc.robot.subsystems.RobotCamera;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -45,7 +48,9 @@ public class RobotContainer {
 
   private final Swerve s_Swerve = new Swerve(m_robotCamera);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
 
     m_gameCommands = new GameCommands(
@@ -54,8 +59,7 @@ public class RobotContainer {
         m_robotCoralPivot,
         m_robotElevator,
         s_Swerve,
-        m_robotCamera
-      );
+        m_robotCamera);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -63,26 +67,28 @@ public class RobotContainer {
             () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
             () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
             () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
-    //        () -> robotCentric.get()));
-    () -> false));
+            // () -> robotCentric.get()));
+            () -> false));
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
 
-    //zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    // zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     driver.button(8).whileTrue(
-      new TeleopSwerve(
+        new TeleopSwerve(
             s_Swerve,
             () -> .5,
             () -> 0,
@@ -90,28 +96,22 @@ public class RobotContainer {
             () -> false));
 
     driver.button(5).whileTrue(
-      m_gameCommands.runCoralIntakeCommand(1)
-    );
+        m_gameCommands.runCoralIntakeCommand(1));
 
     driver.button(1).whileTrue(
-      m_gameCommands.runCoralLaunchCommand(1)
-    );
-    
+        m_gameCommands.runCoralLaunchCommand(1));
+
     driver.button(6).whileTrue(
-      m_gameCommands.runAlgaeIntakeCommand(1)
-    );
+        m_gameCommands.runAlgaeIntakeCommand(1));
 
     driver.button(2).whileTrue(
-      m_gameCommands.runAlgaeLaunchCommand(1)
-    );
+        m_gameCommands.runAlgaeLaunchCommand(1));
 
     driver.button(7).whileTrue(
-      m_gameCommands.centerATagCommand()
-    );
+        m_gameCommands.centerATagCommand());
 
     driver.button(9).whileTrue(
-      m_gameCommands.coralPrepCommand()
-    );
+        m_gameCommands.coralPrepCommand());
   }
 
   /**
@@ -123,18 +123,18 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     return new exampleAuto(s_Swerve);
     // return DriveCommands.driveOne(
-    //   s_Swerve,
-    //   () -> .3,
-    //   () -> 0,
-    //   () -> 0,
-    //   () -> true)
+    // s_Swerve,
+    // () -> .3,
+    // () -> 0,
+    // () -> 0,
+    // () -> true)
     // .withTimeout(5)
-    // .andThen(DriveCommands.driveOne(    
-    //   s_Swerve,
-    //   () -> -.3,
-    //   () -> 0,
-    //   () -> 0,
-    //   () -> true));
+    // .andThen(DriveCommands.driveOne(
+    // s_Swerve,
+    // () -> -.3,
+    // () -> 0,
+    // () -> 0,
+    // () -> true));
   }
 
 }
