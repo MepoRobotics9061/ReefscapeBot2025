@@ -17,8 +17,8 @@ public class RobotElevator extends SubsystemBase {
   private double elevatorEncoderValue;
 
   public RobotElevator() {
-    final int pivotWheelDeviceID = 9;
-    elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
+    final int elevatorWheelDeviceID = 13;
+    elevatorWheel = new SparkMax(elevatorWheelDeviceID, MotorType.kBrushless);
     elevatorEncoder = elevatorWheel.getEncoder();
     }
 

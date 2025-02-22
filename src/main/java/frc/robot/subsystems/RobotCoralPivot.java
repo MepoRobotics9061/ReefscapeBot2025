@@ -22,60 +22,60 @@ public class RobotCoralPivot extends SubsystemBase {
     pivotEncoder = pivotWheel.getEncoder();
     }
 
-  public Command pivotTo(double speed, double desiredValue) {
-    return this.run(
-        () -> {
-          setPivotSpeed(speed * (-pivotEncoderValue + desiredValue));
-        }
-      ).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+    public Command manualPivotMove(double manualAngle) {
+      return this.runEnd(
+          () -> {
+            SmartDashboard.putNumber("Pivot Point", manualAngle);
+            if (pivotEncoderValue > (manualAngle + 2)) {
+              setSpeed(-.2);
+            } else if (pivotEncoderValue < (manualAngle - 2)) {
+              setSpeed(.2);
+            } else {
+              setSpeed((manualAngle - pivotEncoderValue) * .1);
+            }
+          },
+          () -> {
+            stop();
+          }
+        );
+    }
+  
+    public void voidPivotMove(double manualAngle) {
+      SmartDashboard.putNumber("Pivot Point", manualAngle);
+      if (pivotEncoderValue > (manualAngle + 2)) {
+        setSpeed(-.2);
+      } else if (pivotEncoderValue < (manualAngle - 2)) {
+        setSpeed(.2);
+      } else {
+        setSpeed((manualAngle - pivotEncoderValue) * .1);
+      }
     }
 
-    public Command setPivotCommand(double speed, double pivotPoint) {
-      return this.run(
-          () -> {
-            SmartDashboard.putNumber("Pivot Speed", speed);
-            SmartDashboard.putNumber("Pivot Point", pivotPoint);
-          }
-        );
-      }
-
-    public Command changePivotPointCommand(double pivotPoint) {
-      return this.run(
-          () -> {
-            SmartDashboard.putNumber("Pivot Point", pivotPoint + SmartDashboard.getNumber("Pivot Point", 0));
-          }
-        );
-      }
-
-  public Command pivotUp(double speed) {
-    return this.runEnd(
-        () -> {
-          setPivotSpeed(speed);
-        },
-        () -> {
-          stop();
-        }
-      );
-  }
-
-  public Command pivotDown(double speed) {
-    return this.runEnd(
-        () -> {
-          setPivotSpeed(-speed);
-        },
-        () -> {
-          stop();
-        }
-      );
-  }
-
-  public void setPivotSpeed(double speed) {
-    pivotWheel.set(speed);
-  }
-
-  public void stop() {
-    pivotWheel.set(0);
-  }
+    // public Command pivotUp(double speed) {
+    //   return this.runEnd(
+    //       () -> {
+    //         SmartDashboard.putNumber("Manual Angle", SmartDashboard.getNumber("Manual Angle", 0 + speed));
+    //         if (pivotEncoderValue < (manualAngle - .02)) {
+    //           setSpeed(.2);
+    //         } else if (pivotEncoderValue > (manualAngle + .02)) {
+    //           setSpeed(-.2);
+    //         } else {
+    //           setSpeed((manualAngle - pivotEncoderValue) * .2);
+    //         }
+    //       },
+    //       () -> {
+    //         stop();
+    //       }
+    //     );
+    // }
+  
+    public void setSpeed(double speed) {
+      pivotWheel.set(speed);
+    }
+  
+    public void stop() {
+      pivotWheel.set(0);
+    }
 
   @Override public void periodic() {
     pivotEncoderValue = pivotEncoder.getPosition();

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.LimeLightCenterATagCommand;
@@ -71,7 +72,12 @@ public class RobotContainer {
     //        () -> robotCentric.get()));
     () -> false));
 
-    m_robotCoralPivot.setDefaultCommand(m_robotCoralPivot.pivotTo(SmartDashboard.getNumber("Pivot Speed", 0), SmartDashboard.getNumber("Pivot Point", 0)));
+    m_robotCoralPivot.setDefaultCommand(
+      new RunCommand(
+        () -> m_robotCoralPivot.voidPivotMove(SmartDashboard.getNumber("Pivot Point", 0)), 
+        m_robotCoralPivot
+      )
+    );
 
     // Configure the button bindings
     configureButtonBindings();
@@ -93,28 +99,28 @@ public class RobotContainer {
     );
 
     operator.button(1).onTrue(
-      m_gameCommands.setPivotCommand(.1, -20)
+      m_gameCommands.manualPivotMove(-50)
     );
 
     operator.button(3).onTrue(
-      m_gameCommands.setPivotCommand(.1, -15)
+      m_gameCommands.manualPivotMove(-40)
     );
 
     operator.button(4).onTrue(
-      m_gameCommands.setPivotCommand(.1, -10)
+      m_gameCommands.manualPivotMove(-30)
     );
 
     operator.button(2).onTrue(
-      m_gameCommands.setPivotCommand(.1, -5)
+      m_gameCommands.manualPivotMove(-5)
     );
 
-    operator.button(7).onTrue(
-      m_gameCommands.changePivotPointCommand(-.1)
-    );
+    // operator.button(7).whileTrue(
+    //   m_gameCommands.pivotUpCommand(.1)
+    // );
 
-    operator.button(8).onTrue(
-      m_gameCommands.changePivotPointCommand(.1)
-    );
+    // operator.button(8).whileTrue(
+    //   m_gameCommands.pivotDownCommand(.1)
+    // );
 
     operator.povUp().whileTrue(
       m_gameCommands.elevatorUpCommand(1)

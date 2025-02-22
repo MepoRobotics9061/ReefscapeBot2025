@@ -75,25 +75,17 @@ public class GameCommands {
     return m_robotAlgae.launch(speed);
   }
 
-  public Command pivotToCommand(double speed, double desiredValue) {
-    return m_robotCoralPivot.pivotTo(speed, desiredValue);
+  public Command manualPivotMove(double desiredValue) {
+    return m_robotCoralPivot.manualPivotMove(desiredValue);
   }
 
-  public Command setPivotCommand(double speed, double pivotPoint) {
-    return m_robotCoralPivot.setPivotCommand(speed, pivotPoint);
-  }
+  // public Command pivotUpCommand(double speed) {
+  //   return m_robotCoralPivot.pivotUp(speed);
+  // }
 
-  public Command changePivotPointCommand(double pivotPoint) {
-    return m_robotCoralPivot.changePivotPointCommand(pivotPoint);
-  }
-
-  public Command pivotUpCommand(double speed) {
-    return m_robotCoralPivot.pivotUp(speed);
-  }
-
-  public Command pivotDownCommand(double speed) {
-    return m_robotCoralPivot.pivotDown(speed);
-  }
+  // public Command pivotDownCommand(double speed) {
+  //   return m_robotCoralPivot.pivotDown(speed);
+  // }
 
   public Command elevatorUpCommand(double speed) {
     return m_robotElevator.elevatorUp(speed);
