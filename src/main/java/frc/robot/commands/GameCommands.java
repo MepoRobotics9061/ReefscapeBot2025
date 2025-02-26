@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotAlgae;
+import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotCoral;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotElevator;
@@ -16,6 +17,8 @@ import frc.robot.commands.RotateUntil180Command;
 public class GameCommands {
 
   private final RobotAlgae m_robotAlgae;
+
+  private final RobotAlgaePivot m_robotAlgaePivot;
 
   private final RobotCoral m_robotCoral;
 
@@ -39,6 +42,7 @@ public class GameCommands {
 
   public GameCommands(
     RobotAlgae robotAlgae,
+    RobotAlgaePivot robotAlgaePivot,
     RobotCoral robotCoral,
     RobotCoralPivot robotCoralPivot,
     RobotElevator robotElevator,
@@ -46,6 +50,8 @@ public class GameCommands {
     RobotCamera robotCamera
   ) {
     m_robotAlgae = robotAlgae;
+
+    m_robotAlgaePivot = robotAlgaePivot;
 
     m_robotCoral = robotCoral;
 
@@ -75,8 +81,12 @@ public class GameCommands {
     return m_robotAlgae.launch(speed);
   }
 
-  public Command manualPivotMove(double desiredValue) {
+  public Command manualCoralPivotMove(double desiredValue) {
     return m_robotCoralPivot.manualPivotMove(desiredValue);
+  }
+
+  public Command coralPivotPositionSetCommand(double pivotPoint) {
+    return m_robotCoralPivot.pivotPositionSet(pivotPoint);
   }
 
   // public Command pivotUpCommand(double speed) {
@@ -87,12 +97,8 @@ public class GameCommands {
   //   return m_robotCoralPivot.pivotDown(speed);
   // }
 
-  public Command elevatorUpCommand(double speed) {
-    return m_robotElevator.elevatorUp(speed);
-  }
-
-  public Command elevatorDownCommand(double speed) {
-    return m_robotElevator.elevatorDown(speed);
+  public Command elevatorMoveCommand(double desiredValue) {
+    return m_robotElevator.manualElevatorMove(desiredValue);
   }
 
   public Command driveCommand(double vertical, double horizontal, double rotate) {

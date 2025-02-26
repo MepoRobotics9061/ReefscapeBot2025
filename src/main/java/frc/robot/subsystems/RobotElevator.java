@@ -17,65 +17,47 @@ public class RobotElevator extends SubsystemBase {
   private double elevatorEncoderValue;
 
   public RobotElevator() {
-    final int elevatorWheelDeviceID = 13;
-    elevatorWheel = new SparkMax(elevatorWheelDeviceID, MotorType.kBrushless);
+    final int pivotWheelDeviceID = 9;
+    elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     elevatorEncoder = elevatorWheel.getEncoder();
     }
 
-  public Command moveElevatorTo(double speed, double desiredValue) {
-    return this.run(
-        () -> {
-          setElevatorSpeed(speed * (-elevatorEncoderValue + desiredValue));
-        }
-      ).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf);
+    public Command manualElevatorMove(double manualAngle) {
+      return this.runEnd(
+          () -> {
+            SmartDashboard.putNumber("Elevator Point", manualAngle);
+            if (elevatorEncoderValue > (manualAngle + 2)) {
+              setSpeed(-.2);
+            } else if (elevatorEncoderValue < (manualAngle - 2)) {
+              setSpeed(.2);
+            } else {
+              setSpeed((manualAngle - elevatorEncoderValue) * .1);
+            }
+          },
+          () -> {
+            stop();
+          }
+        );
     }
-
-    public Command setPivotCommand(double speed, double elevatorPoint) {
-      return this.run(
-          () -> {
-            SmartDashboard.putNumber("Elevator Speed", speed);
-            SmartDashboard.putNumber("Elevator Point", elevatorPoint);
-          }
-        );
+  
+    public void voidElevatorMove(double manualAngle) {
+      SmartDashboard.putNumber("Elevator Point", manualAngle);
+      if (elevatorEncoderValue > (manualAngle + 2)) {
+        setSpeed(-.2);
+      } else if (elevatorEncoderValue < (manualAngle - 2)) {
+        setSpeed(.2);
+      } else {
+        setSpeed((manualAngle - elevatorEncoderValue) * .1);
       }
-
-    public Command changeElevatorPointCommand(double elevatorPoint) {
-      return this.run(
-          () -> {
-            SmartDashboard.putNumber("Elevator Point", elevatorPoint + SmartDashboard.getNumber("Elevator Point", 0));
-          }
-        );
-      }
-
-  public Command elevatorUp(double speed) {
-    return this.runEnd(
-        () -> {
-          setElevatorSpeed(speed);
-        },
-        () -> {
-          stop();
-        }
-      );
-  }
-
-  public Command elevatorDown(double speed) {
-    return this.runEnd(
-        () -> {
-          setElevatorSpeed(-speed);
-        },
-        () -> {
-          stop();
-        }
-      );
-  }
-
-  public void setElevatorSpeed(double speed) {
-    elevatorWheel.set(speed);
-  }
-
-  public void stop() {
-    elevatorWheel.set(0);
-  }
+    }
+  
+    public void setSpeed(double speed) {
+      elevatorWheel.set(speed);
+    }
+  
+    public void stop() {
+      elevatorWheel.set(0);
+    }
 
   @Override public void periodic() {
     elevatorEncoderValue = elevatorEncoder.getPosition();

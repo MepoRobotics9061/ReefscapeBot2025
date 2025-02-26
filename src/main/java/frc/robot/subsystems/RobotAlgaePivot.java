@@ -8,7 +8,8 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-public class RobotCoralPivot extends SubsystemBase {
+
+public class RobotAlgaePivot extends SubsystemBase {
 
   SparkMax pivotWheel;
 
@@ -16,11 +17,11 @@ public class RobotCoralPivot extends SubsystemBase {
 
   private double pivotEncoderValue;
 
-  private double algaePivotPoint;
+  private double coralPivotPoint;
 
-  private double coralCurrentPosition;
+  private double currentAlgaeAngle;
 
-  public RobotCoralPivot() {
+  public RobotAlgaePivot() {
     final int pivotWheelDeviceID = 10;
     pivotWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     pivotEncoder = pivotWheel.getEncoder();
@@ -44,19 +45,19 @@ public class RobotCoralPivot extends SubsystemBase {
         );
     }
 
-    public Command pivotPositionSet(double coralPivotPoint) {
+    public Command pivotPositionSet(double algaePivotPoint) {
       return this.run(
         () -> {
-          algaePivotPoint = SmartDashboard.getNumber("Algae Pivot Point", 0);
-          coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Point", 0);
-          if(algaePivotPoint < -4) {
-            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
-          } else if(algaePivotPoint > -1 && algaePivotPoint < -2){
-            if(coralPivotPoint > -35) {
-              SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
+          coralPivotPoint = SmartDashboard.getNumber("Coral Pivot Point", 0);
+          currentAlgaeAngle = SmartDashboard.getNumber("Algae Pivot Point", 0);
+          if(coralPivotPoint > -20) {
+            SmartDashboard.putNumber("Coral Pivot Point", algaePivotPoint);
+          } else if(coralPivotPoint < -20) {
+            if(currentAlgaeAngle < -2.5 && algaePivotPoint < -2.5){
+              SmartDashboard.putNumber("Coral Pivot Point", algaePivotPoint);
             }
-          } else if(coralPivotPoint > -20 && coralCurrentPosition > -20) {
-            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
+          } else if(algaePivotPoint < -4) {
+            SmartDashboard.putNumber("Coral Pivot Point", algaePivotPoint);
           }
         }
       );

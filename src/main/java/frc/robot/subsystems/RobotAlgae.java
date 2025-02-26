@@ -10,7 +10,7 @@ public class RobotAlgae extends SubsystemBase {
   SparkMax wheel;
 
   public RobotAlgae() {
-    final int wheelDeviceID = 12;
+    final int wheelDeviceID = 14;
     wheel = new SparkMax(wheelDeviceID, MotorType.kBrushless);
   }
 

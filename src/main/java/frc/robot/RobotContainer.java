@@ -20,6 +20,7 @@ import frc.robot.subsystems.RobotCamera;
 import frc.robot.subsystems.RobotCoral;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotCoralPivot;
+import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotElevator;
 import frc.robot.subsystems.RobotCamera;
 
@@ -40,6 +41,8 @@ public class RobotContainer {
   /* Subsystems */
   private final RobotAlgae m_robotAlgae = new RobotAlgae();
 
+  private final RobotAlgaePivot m_robotAlgaePivot = new RobotAlgaePivot();
+
   private final RobotCoral m_robotCoral = new RobotCoral();
 
   private final RobotCoralPivot m_robotCoralPivot = new RobotCoralPivot();
@@ -56,6 +59,7 @@ public class RobotContainer {
 
     m_gameCommands = new GameCommands(
         m_robotAlgae,
+        m_robotAlgaePivot,
         m_robotCoral,
         m_robotCoralPivot,
         m_robotElevator,
@@ -74,8 +78,15 @@ public class RobotContainer {
 
     m_robotCoralPivot.setDefaultCommand(
       new RunCommand(
-        () -> m_robotCoralPivot.voidPivotMove(SmartDashboard.getNumber("Pivot Point", 0)), 
+        () -> m_robotCoralPivot.voidPivotMove(SmartDashboard.getNumber("Coral Pivot Point", 0)), 
         m_robotCoralPivot
+      )
+    );
+
+    m_robotAlgaePivot.setDefaultCommand(
+      new RunCommand(
+        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", 0)), 
+        m_robotAlgaePivot
       )
     );
 
@@ -99,19 +110,19 @@ public class RobotContainer {
     );
 
     operator.button(1).onTrue(
-      m_gameCommands.manualPivotMove(-50)
+      m_gameCommands.coralPivotPositionSetCommand(-45)
     );
 
     operator.button(3).onTrue(
-      m_gameCommands.manualPivotMove(-40)
+      m_gameCommands.coralPivotPositionSetCommand(-35)
     );
 
     operator.button(4).onTrue(
-      m_gameCommands.manualPivotMove(-30)
+      m_gameCommands.coralPivotPositionSetCommand(-15)
     );
 
     operator.button(2).onTrue(
-      m_gameCommands.manualPivotMove(-5)
+      m_gameCommands.coralPivotPositionSetCommand(-5)
     );
 
     // operator.button(7).whileTrue(
@@ -123,11 +134,11 @@ public class RobotContainer {
     // );
 
     operator.povUp().whileTrue(
-      m_gameCommands.elevatorUpCommand(1)
+      m_gameCommands.elevatorMoveCommand(0)
     );
 
     operator.povDown().whileTrue(
-      m_gameCommands.elevatorDownCommand(1)
+      m_gameCommands.elevatorMoveCommand(10)
     );
 
     operator.button(5).whileTrue(
