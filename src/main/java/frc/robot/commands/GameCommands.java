@@ -8,6 +8,7 @@ import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotCoral;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotElevator;
+import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.LimeLightCoralPrepCommand;
@@ -20,15 +21,17 @@ public class GameCommands {
 
   private final RobotAlgaePivot m_robotAlgaePivot;
 
+  private final RobotCamera m_robotCamera;
+
   private final RobotCoral m_robotCoral;
 
   private final RobotCoralPivot m_robotCoralPivot;
 
   private final RobotElevator m_robotElevator;
 
-  private final Swerve s_Swerve;
+  private final RobotLights m_robotLights;
 
-  private final RobotCamera m_robotCamera;
+  private final Swerve s_Swerve;
 
   double gyro;
 
@@ -43,15 +46,18 @@ public class GameCommands {
   public GameCommands(
     RobotAlgae robotAlgae,
     RobotAlgaePivot robotAlgaePivot,
+    RobotCamera robotCamera,
     RobotCoral robotCoral,
     RobotCoralPivot robotCoralPivot,
     RobotElevator robotElevator,
-    Swerve swerve,
-    RobotCamera robotCamera
+    RobotLights robotLights,
+    Swerve swerve
   ) {
     m_robotAlgae = robotAlgae;
 
     m_robotAlgaePivot = robotAlgaePivot;
+
+    m_robotCamera = robotCamera;
 
     m_robotCoral = robotCoral;
 
@@ -59,9 +65,9 @@ public class GameCommands {
 
     m_robotElevator = robotElevator;
 
-    s_Swerve = swerve;
+    m_robotLights = robotLights;
 
-    m_robotCamera = robotCamera;
+    s_Swerve = swerve;
 
   }
 
@@ -120,5 +126,9 @@ public class GameCommands {
 
   public Command coralPrepCommand(){
     return new LimeLightCoralPrepCommand(s_Swerve);
+  }
+
+  public Command lightSetCommand(String color, String bufferview){
+    return m_robotLights.lightArea(color, bufferview);
   }
 }

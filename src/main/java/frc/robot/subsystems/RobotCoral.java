@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -12,17 +13,26 @@ public class RobotCoral extends SubsystemBase {
   SparkMax leftWheel;
   SparkMax rightWheel;
 
+    private DigitalInput limitSwitch;
+
   public RobotCoral() {
     final int leftWheelDeviceID = 11;
     final int rightWheelDeviceID = 12;
     leftWheel = new SparkMax(leftWheelDeviceID, MotorType.kBrushless);
     rightWheel = new SparkMax(rightWheelDeviceID, MotorType.kBrushless);
+
+    limitSwitch = new DigitalInput(1);
+
   }
 
   public Command launch(double speed) {
     return this.runEnd(
         () -> {
-          setLauncherSpeed(-speed, -speed);
+          if(limitSwitch.get() == false) {
+            setWheelSpeed(-speed, -speed);
+          } else {
+            stop();
+          }
         },
         () -> {
           stop();
@@ -33,7 +43,7 @@ public class RobotCoral extends SubsystemBase {
   public Command intake(double speed) {
     return this.runEnd(
         () -> {
-          setLauncherSpeed(speed, speed);
+          setWheelSpeed(speed, speed);
         },
         () -> {
           stop();
@@ -41,7 +51,7 @@ public class RobotCoral extends SubsystemBase {
       );
   }
 
-  public void setLauncherSpeed(double speed1, double speed2) {
+  public void setWheelSpeed(double speed1, double speed2) {
     leftWheel.set(speed1);
     rightWheel.set(-speed2);
   }

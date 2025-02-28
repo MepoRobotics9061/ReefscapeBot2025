@@ -22,6 +22,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotElevator;
+import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
 
 /**
@@ -51,6 +52,8 @@ public class RobotContainer {
 
   private final RobotCamera m_robotCamera = new RobotCamera();
 
+  private final RobotLights m_robotLights = new RobotLights();
+
   private final Swerve s_Swerve = new Swerve(m_robotCamera);
 
 
@@ -60,11 +63,12 @@ public class RobotContainer {
     m_gameCommands = new GameCommands(
         m_robotAlgae,
         m_robotAlgaePivot,
+        m_robotCamera,
         m_robotCoral,
         m_robotCoralPivot,
         m_robotElevator,
-        s_Swerve,
-        m_robotCamera
+        m_robotLights,
+        s_Swerve
       );
 
     s_Swerve.setDefaultCommand(
@@ -164,6 +168,23 @@ public class RobotContainer {
     driver.button(12).whileTrue(
       m_gameCommands.coralPrepCommand()
     );
+
+    driver.button(5).whileTrue(
+      m_gameCommands.lightSetCommand("red", "left")
+    );
+
+    driver.button(3).whileTrue(
+      m_gameCommands.lightSetCommand("black", "left")
+    );
+
+    driver.button(6).whileTrue(
+      m_gameCommands.lightSetCommand("red", "right")
+    );
+
+    driver.button(4).whileTrue(
+      m_gameCommands.lightSetCommand("black", "right")
+    );
+
   }
 
   /**
