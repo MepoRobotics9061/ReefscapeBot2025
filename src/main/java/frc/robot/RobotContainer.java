@@ -111,7 +111,7 @@ public class RobotContainer {
 
     // driver.button(3).onTrue(
     //   s_Swerve.zeroGyro()
-    // ); 
+    // );
 
     operator.button(1).onTrue(
       m_gameCommands.coralPivotPositionSetCommand(-45)
