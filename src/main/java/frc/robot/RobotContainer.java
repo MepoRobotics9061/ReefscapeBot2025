@@ -113,6 +113,20 @@ public class RobotContainer {
     //   s_Swerve.zeroGyro()
     // );
 
+    /*  XBox:
+          5/6 = Intake
+          Trigger = Fire
+          10 = Toggle
+          POV = Algae Pivot/Elevator
+          1/2/3/4 = Coral Pivot
+          7/8 = Lights
+
+        Joystick:
+          7 = Center A Tag
+          9 = Reef A Tag
+          11 = Processor A Tag
+        */
+
     operator.button(1).onTrue(
       m_gameCommands.coralPivotPositionSetCommand(-45)
     );
