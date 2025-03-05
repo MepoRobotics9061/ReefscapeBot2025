@@ -1,53 +1,48 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.CANdle;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.AddressableLEDBufferView;
-import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.util.Color;
+import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.CANdleConfiguration;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.ejml.equation.Variable;
 
 public class RobotLights extends SubsystemBase {
 
-    private CANdle m_led;
-
-    private AddressableLEDBufferView m_left;
-
-    private AddressableLEDBufferView m_right;
-
-    private LEDPattern red;
-
-    private LEDPattern black;
+CANdle m_led;
 
 public RobotLights() {
     final int CANdleDeviceID = 15;
-    CANdle m_led = new CANdle(CANdleDeviceID);
-    AddressableLEDBuffer m_buffer = new AddressableLEDBuffer(120);
-    m_left = m_buffer.createView(0, 3);
-    m_right = m_buffer.createView(4, 7).reversed();
-    red = LEDPattern.solid(Color.kRed);
-    black = LEDPattern.solid(Color.kBlack);
+    m_led = new CANdle(CANdleDeviceID);
+    CANdleConfiguration config = new CANdleConfiguration();
+    config.stripType = LEDStripType.RGB; // set the strip type to RGB
+    config.brightnessScalar = 0.5; // dim the LEDs to half brightness
+    m_led.configAllSettings(config);
 }
 
-    public Command lightArea(String color, String bufferView){
+    public Command lightArea(String color, String side){
         return this.run(
             () -> {
-                if(color == "red"){
+                m_led.setLEDs(0, 0, 0);
+                if(color == "blue"){
 
-                    if(bufferView == "left"){
-                        red.applyTo(m_left);
+                    if(side == "left"){
+                        m_led.setLEDs(0, 0, 255, 50, 9, 5);
+                        m_led.setLEDs(255, 0, 0, 50, 14, 5);
+
                     } else {
-                        red.applyTo(m_right);
+                        m_led.setLEDs(0, 0, 255, 50, 14, 5);
+                        m_led.setLEDs(255, 0, 0, 50, 9, 5);
                     }
 
                 } else {
 
-                    if(bufferView == "left"){
-                        black.applyTo(m_left);
+                    if(side == "left"){
+                        m_led.setLEDs(255, 0, 0, 50, 9, 5);
+                        m_led.setLEDs(0, 0, 255, 50, 14, 5);
+
                     } else {
-                        black.applyTo(m_right);
+                        m_led.setLEDs(255, 0, 0, 50, 14, 5);
+                        m_led.setLEDs(0, 0, 255, 50, 9, 5);
                     }
 
                 }

@@ -22,7 +22,7 @@ public class RobotAlgaePivot extends SubsystemBase {
   private double currentAlgaeAngle;
 
   public RobotAlgaePivot() {
-    final int pivotWheelDeviceID = 10;
+    final int pivotWheelDeviceID = 13;
     pivotWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     pivotEncoder = pivotWheel.getEncoder();
     }

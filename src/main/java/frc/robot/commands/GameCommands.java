@@ -128,7 +128,7 @@ public class GameCommands {
     return new LimeLightCoralPrepCommand(s_Swerve);
   }
 
-  public Command lightSetCommand(String color, String bufferview){
-    return m_robotLights.lightArea(color, bufferview);
+  public Command lightSetCommand(String color, String side){
+    return m_robotLights.lightArea(color, side);
   }
 }

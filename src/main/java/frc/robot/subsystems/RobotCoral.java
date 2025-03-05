@@ -21,18 +21,14 @@ public class RobotCoral extends SubsystemBase {
     leftWheel = new SparkMax(leftWheelDeviceID, MotorType.kBrushless);
     rightWheel = new SparkMax(rightWheelDeviceID, MotorType.kBrushless);
 
-    limitSwitch = new DigitalInput(1);
+    limitSwitch = new DigitalInput(5);
 
   }
 
   public Command launch(double speed) {
     return this.runEnd(
         () -> {
-          if(limitSwitch.get() == false) {
             setWheelSpeed(-speed, -speed);
-          } else {
-            stop();
-          }
         },
         () -> {
           stop();
@@ -43,7 +39,11 @@ public class RobotCoral extends SubsystemBase {
   public Command intake(double speed) {
     return this.runEnd(
         () -> {
-          setWheelSpeed(speed, speed);
+          if(limitSwitch.get() == false) {
+            setWheelSpeed(speed, speed);
+          } else {
+            stop();
+          }
         },
         () -> {
           stop();

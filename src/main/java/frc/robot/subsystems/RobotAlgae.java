@@ -15,7 +15,7 @@ public class RobotAlgae extends SubsystemBase {
   public RobotAlgae() {
     final int wheelDeviceID = 14;
     wheel = new SparkMax(wheelDeviceID, MotorType.kBrushless);
-    limitSwitch = new DigitalInput(0);
+    limitSwitch = new DigitalInput(6);
   }
 
   public Command launch(double speed) {

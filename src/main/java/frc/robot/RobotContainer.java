@@ -109,9 +109,9 @@ public class RobotContainer {
 
     //zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    driver.button(3).onTrue(
-      s_Swerve.zeroGyro()
-    );
+    // driver.button(3).onTrue(
+    //   s_Swerve.zeroGyro()
+    // );
 
     operator.button(1).onTrue(
       m_gameCommands.coralPivotPositionSetCommand(-45)
@@ -174,7 +174,7 @@ public class RobotContainer {
     );
 
     driver.button(3).whileTrue(
-      m_gameCommands.lightSetCommand("black", "left")
+      m_gameCommands.lightSetCommand("blue", "left")
     );
 
     driver.button(6).whileTrue(
@@ -182,7 +182,7 @@ public class RobotContainer {
     );
 
     driver.button(4).whileTrue(
-      m_gameCommands.lightSetCommand("black", "right")
+      m_gameCommands.lightSetCommand("blue", "right")
     );
 
   }
