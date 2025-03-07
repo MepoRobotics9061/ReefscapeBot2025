@@ -4,7 +4,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,11 +15,13 @@ public class RobotElevator extends SubsystemBase {
   private RelativeEncoder elevatorEncoder;
 
   private double elevatorEncoderValue;
+  private DutyCycleEncoder angleEncoder;
 
   public RobotElevator() {
     final int pivotWheelDeviceID = 9;
     elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     elevatorEncoder = elevatorWheel.getEncoder();
+    angleEncoder = new DutyCycleEncoder(9);
     }
 
     public Command manualElevatorMove(double manualAngle) {
@@ -59,8 +61,13 @@ public class RobotElevator extends SubsystemBase {
       elevatorWheel.set(0);
     }
 
+    public void getEncoderValue() {
+
+    }
+
   @Override public void periodic() {
     elevatorEncoderValue = elevatorEncoder.getPosition();
     SmartDashboard.putNumber("Elevator Encoder", elevatorEncoderValue);
+    SmartDashboard.putNumber("Elevator Absolute Encoder", angleEncoder.get());
   }
 }
