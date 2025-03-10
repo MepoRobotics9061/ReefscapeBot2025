@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.LimeLightCenterATagCommand;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.GameCommands;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.RobotAlgae;
@@ -37,8 +39,6 @@ public class RobotContainer {
 
   private final CommandXboxController operator = new CommandXboxController(1);
 
-  private final GameCommands m_gameCommands;
-
   /* Subsystems */
   private final RobotAlgae m_robotAlgae = new RobotAlgae();
 
@@ -54,7 +54,13 @@ public class RobotContainer {
 
   private final RobotLights m_robotLights = new RobotLights();
 
-  private final Swerve s_Swerve = new Swerve(m_robotCamera);
+  private final Swerve s_Swerve = new Swerve(m_robotCamera); 
+  
+  /* Commands */
+  
+  private final GameCommands m_gameCommands;
+  private final AutoCommands m_autoCommands;
+  private final SendableChooser<Command> m_autoChooser;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -70,6 +76,20 @@ public class RobotContainer {
       m_robotLights,
       s_Swerve
     );
+
+        m_autoCommands = new AutoCommands(
+        m_gameCommands,
+        m_robotDrive,
+        m_robotLaunch,
+        m_robotArm,
+        m_robotGyro,
+        m_robotCamera,
+        m_robotHook
+      );
+
+    m_autoChooser = new SendableChooser<Command>();
+
+
 
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
@@ -103,6 +123,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+    configureAutos();
   }
 
   /**
@@ -210,15 +231,23 @@ public class RobotContainer {
 
   }
 
+  private void configureAutos() {
+    m_autoChooser.setDefaultOption("2", m_autoCommands.autoCommand2());
+    m_autoChooser.addOption("1", m_autoCommands.autoCommand1());
+    m_autoChooser.addOption("2", m_autoCommands.autoCommand2());
+    m_autoChooser.addOption("3", m_autoCommands.autoCommand3());
+
+
+    SmartDashboard.putData("AutoCommand", m_autoChooser);
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new exampleAuto(s_Swerve);
-
+    return m_autoChooser.getSelected();
   }
 
 }
