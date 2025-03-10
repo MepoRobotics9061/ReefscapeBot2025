@@ -150,19 +150,19 @@ public class RobotContainer {
       m_gameCommands.coralPivotPositionSetCommand(-5)
     );
 
-    operator.povDown().and(operator.button(10)).onTrue(
+    operator.povDown().and(operator.button(10).negate()).onTrue(
       m_gameCommands.algaePivotPositionSetCommand(-5)
     );
 
-    operator.povLeft().and(operator.button(10)).onTrue(
+    operator.povLeft().and(operator.button(10).negate()).onTrue(
       m_gameCommands.algaePivotPositionSetCommand(-10)
     );
 
-    operator.povUp().and(operator.button(10)).onTrue(
+    operator.povUp().and(operator.button(10).negate()).onTrue(
       m_gameCommands.algaePivotPositionSetCommand(-15)
     );
 
-    operator.povRight().and(operator.button(10)).onTrue(
+    operator.povRight().and(operator.button(10).negate()).onTrue(
       m_gameCommands.algaePivotPositionSetCommand(-20)
     );
 
@@ -192,28 +192,20 @@ public class RobotContainer {
       m_gameCommands.runAlgaeLaunchCommand(1)
     );
 
-    driver.button(11).whileTrue(
+    driver.button(7).whileTrue(
       m_gameCommands.centerATagCommand()
     );
 
-    driver.button(12).whileTrue(
+    driver.button(9).whileTrue(
       m_gameCommands.coralPrepCommand()
     );
 
-    driver.button(5).whileTrue(
-      m_gameCommands.lightSetCommand("red", "left")
-    );
-
-    driver.button(3).whileTrue(
+    operator.button(5).whileTrue(
       m_gameCommands.lightSetCommand("blue", "left")
     );
 
-    driver.button(6).whileTrue(
-      m_gameCommands.lightSetCommand("red", "right")
-    );
-
-    driver.button(4).whileTrue(
-      m_gameCommands.lightSetCommand("blue", "right")
+    operator.button(3).whileTrue(
+      m_gameCommands.lightSetCommand("red", "left")
     );
 
   }
