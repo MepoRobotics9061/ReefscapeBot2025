@@ -61,24 +61,24 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_gameCommands = new GameCommands(
-        m_robotAlgae,
-        m_robotAlgaePivot,
-        m_robotCamera,
-        m_robotCoral,
-        m_robotCoralPivot,
-        m_robotElevator,
-        m_robotLights,
-        s_Swerve
-      );
+      m_robotAlgae,
+      m_robotAlgaePivot,
+      m_robotCamera,
+      m_robotCoral,
+      m_robotCoralPivot,
+      m_robotElevator,
+      m_robotLights,
+      s_Swerve
+    );
 
     s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
-            () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
-            () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
-    //        () -> robotCentric.get()));
-    () -> false));
+      new TeleopSwerve(
+        s_Swerve,
+        () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
+        () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
+        () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
+    //  () -> robotCentric.get()));
+        () -> false));
 
     m_robotCoralPivot.setDefaultCommand(
       new RunCommand(
