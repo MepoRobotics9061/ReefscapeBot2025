@@ -95,6 +95,10 @@ public class GameCommands {
     return m_robotCoralPivot.pivotPositionSet(pivotPoint);
   }
 
+  public Command algaePivotPositionSetCommand(double pivotPoint) {
+    return m_robotAlgaePivot.pivotPositionSet(pivotPoint);
+  }
+
   // public Command pivotUpCommand(double speed) {
   //   return m_robotCoralPivot.pivotUp(speed);
   // }

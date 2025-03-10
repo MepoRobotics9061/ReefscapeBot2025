@@ -150,20 +150,28 @@ public class RobotContainer {
       m_gameCommands.coralPivotPositionSetCommand(-5)
     );
 
-    // operator.button(7).whileTrue(
-    //   m_gameCommands.pivotUpCommand(.1)
-    // );
+    operator.povDown().and(operator.button(10)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-5)
+    );
 
-    // operator.button(8).whileTrue(
-    //   m_gameCommands.pivotDownCommand(.1)
-    // );
+    operator.povLeft().and(operator.button(10)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-10)
+    );
 
-    operator.povUp().whileTrue(
+    operator.povUp().and(operator.button(10)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-15)
+    );
+
+    operator.povRight().and(operator.button(10)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-20)
+    );
+
+    operator.povUp().and(operator.button(10)).whileTrue(
       //m_gameCommands.elevatorMoveCommand(0)
       m_robotElevator.elevatorMove(.5)
     );
 
-    operator.povDown().whileTrue(
+    operator.povDown().and(operator.button(10)).whileTrue(
       //m_gameCommands.elevatorMoveCommand(10)
       m_robotElevator.elevatorMove(-.5)
     );
