@@ -1,140 +1,62 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.RobotArm;
-import frc.robot.subsystems.RobotCamera;
 import frc.robot.subsystems.RobotDrive;
-import frc.robot.subsystems.RobotGyro;
-import frc.robot.subsystems.RobotHook;
 import frc.robot.subsystems.RobotLaunch;
 
-public class AutoCommands {
+public final class AutoCommands {
 
-  private final GameCommands m_gameCommands;
+  public static Command autoDrive(RobotDrive m_robotDrive) {
+    return new RunCommand(() -> m_robotDrive.driveForward(), m_robotDrive)
+      .withTimeout(5)
+      .andThen(new RunCommand(() -> m_robotDrive.driveStop(), m_robotDrive));
+  }
 
-  private final RobotDrive m_robotDrive;
-
-  private final RobotLaunch m_robotLaunch;
-
-  private final RobotArm m_robotArm;
-
-  private final RobotGyro m_robotGyro;
-
-  private final RobotCamera m_robotCamera;
-
-  private final RobotHook m_robotHook;
-
-  double gyroAngle;
-  
-
-  public AutoCommands(
-    GameCommands gameCommands,
-    RobotDrive robotDrive,
-    RobotLaunch robotLaunch,
-    RobotArm robotArm,
-    RobotGyro robotGyro,
-    RobotCamera robotCamera,
-    RobotHook robotHook
+  public static Command autoIntake(
+    RobotArm m_robotArm,
+    RobotDrive m_robotDrive,
+    RobotLaunch m_robotLaunch
   ) {
-    m_gameCommands = gameCommands;
-
-    m_robotDrive = robotDrive;
-
-    m_robotLaunch = robotLaunch;
-
-    m_robotArm = robotArm;
-
-    m_robotGyro = robotGyro;
-
-    m_robotCamera = robotCamera;
-
-    m_robotHook = robotHook;
-    
-  }
-
-  public Command autoCommand1() {
-    return Commands
-      .sequence(
-        m_gameCommands.moveArmLP().withTimeout(2),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15),
-        m_gameCommands.moveArmIP().alongWith(m_gameCommands.turnLAngle()).withTimeout(.9),
-        m_gameCommands
-          .runIntakeCommand()
-          .alongWith(m_gameCommands.moveArmIP())
-          .alongWith(m_gameCommands.runBDrive())
-          .withTimeout(1.75),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runFDrive())
-          .withTimeout(2),
-        m_gameCommands.turnCenter().withTimeout(.60),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15)
+    return new RunCommand(() -> m_robotArm.manualArmMove(.16), m_robotArm)
+      .withTimeout(1.0)
+      .andThen(
+        new RunCommand(() -> m_robotDrive.driveBackwards(), m_robotDrive)
       )
-      .withName("autoCommand");
-  }
-  public Command autoCommand2() {
-    return Commands
-      .sequence(
-        // m_gameCommands.runRelayOn(),
-        m_gameCommands.moveArmLP().withTimeout(2),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15),
-        m_gameCommands.moveArmIP().withTimeout(1),
-        m_gameCommands
-          .runIntakeCommand()
-          .alongWith(m_gameCommands.runBDrive())
-          .withTimeout(1.25),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runFDrive())
-          .withTimeout(1.25),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15)
-      )
-      .withName("autoCommand");
+      .alongWith(new RunCommand(() -> m_robotLaunch.intake(), m_robotLaunch))
+      .withTimeout(1.0);
   }
 
-public Command autoCommand3() {
-  return Commands
-    .sequence(
-      // m_gameCommands.runRelayOn(),
-      m_gameCommands.moveArmLP().withTimeout(2),
-      m_gameCommands
-        .moveArmLP()
-        .alongWith(m_gameCommands.runLaunchCommand())
-        .withTimeout(2.15),
-      m_gameCommands.moveArmIP().alongWith(m_gameCommands.turnRAngle()).withTimeout(1.5),
-      m_gameCommands
-        .runIntakeCommand()
-        .alongWith(m_gameCommands.runBDrive())
-        .withTimeout(2),
-      m_gameCommands
-        .moveArmLP()
-        .alongWith(m_gameCommands.runFDrive())
-        .withTimeout(2),
-      m_gameCommands.turnCenter().alongWith(m_gameCommands.moveArmLP()).withTimeout(.65),
-      m_gameCommands
-        .moveArmLP()
-        .alongWith(m_gameCommands.runLaunchCommand())
-        .withTimeout(2.15)
-    )
-    .withName("autoCommand");
-}
+  public static Command autoLaunch(RobotLaunch m_robotLaunch) {
+    return new RunCommand(() -> m_robotLaunch.launchPrep(), m_robotLaunch)
+      .withTimeout(.15)
+      .andThen(new RunCommand(() -> m_robotLaunch.prepStop(), m_robotLaunch))
+      .withTimeout(0.5)
+      .andThen(new RunCommand(() -> m_robotLaunch.launch(), m_robotLaunch))
+      .withTimeout(2.5)
+      .andThen(new RunCommand(() -> m_robotLaunch.stop()));
+  }
 
-public void robotPeriodic(){
-  gyroAngle = SmartDashboard.getNumber("Gyro", 0);
-}
+  public static Command autoCenter(RobotDrive m_robotDrive) {
+    return new RunCommand(() -> m_robotDrive.aCenterATag(), m_robotDrive);
+  }
 
+  public static Command autoMoveAim(
+    RobotArm m_robotArm,
+    RobotDrive m_robotDrive
+  ) {
+    return new RunCommand(() -> m_robotDrive.autoMove(), m_robotDrive)
+      .alongWith(new RunCommand(() -> m_robotArm.autoAim(), m_robotArm));
+  }
+
+  public static Command autoBrakeRelease(RobotArm m_robotRelay) {
+    return new RunCommand(() -> m_robotRelay.relayOn(), m_robotRelay);
+  }
+
+  public void robotPeriodic() {}
+
+  private AutoCommands() {
+    throw new UnsupportedOperationException("This is a utility class!");
+  }
 }

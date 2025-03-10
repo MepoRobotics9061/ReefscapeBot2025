@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.autos.Autos;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.LimeLightCenterATagCommand;
-import frc.robot.commands.AutoCommands;
 import frc.robot.commands.GameCommands;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.RobotAlgae;
@@ -59,7 +59,7 @@ public class RobotContainer {
   /* Commands */
   
   private final GameCommands m_gameCommands;
-  private final AutoCommands m_autoCommands;
+  private final Autos m_autoCommands;
   private final SendableChooser<Command> m_autoChooser;
 
 
@@ -77,7 +77,7 @@ public class RobotContainer {
       s_Swerve
     );
 
-        m_autoCommands = new AutoCommands(
+        m_autoCommands = new Autos(
         m_gameCommands,
         m_robotDrive,
         m_robotLaunch,
