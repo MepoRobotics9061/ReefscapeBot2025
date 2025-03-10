@@ -52,6 +52,17 @@ public class RobotElevator extends SubsystemBase {
         setSpeed((manualAngle - elevatorEncoderValue) * .1);
       }
     }
+
+    public Command elevatorMove(double speed) {
+      return this.runEnd(
+          () -> {
+      setSpeed(speed);
+          }, 
+          () -> {
+            stop();
+          }
+      );
+    }
   
     public void setSpeed(double speed) {
       elevatorWheel.set(speed);
