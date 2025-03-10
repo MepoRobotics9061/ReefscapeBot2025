@@ -94,6 +94,13 @@ public class RobotContainer {
       )
     );
 
+    // m_robotElevator.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> m_robotElevator.voidElevatorMove(SmartDashboard.getNumber("Elevator", 0)), 
+    //     m_robotElevator
+    //   )
+    // );
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -152,11 +159,13 @@ public class RobotContainer {
     // );
 
     operator.povUp().whileTrue(
-      m_gameCommands.elevatorMoveCommand(0)
+      //m_gameCommands.elevatorMoveCommand(0)
+      m_robotElevator.elevatorMove(.5)
     );
 
     operator.povDown().whileTrue(
-      m_gameCommands.elevatorMoveCommand(10)
+      //m_gameCommands.elevatorMoveCommand(10)
+      m_robotElevator.elevatorMove(-.5)
     );
 
     operator.button(5).whileTrue(
