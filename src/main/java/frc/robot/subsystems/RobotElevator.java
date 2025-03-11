@@ -28,12 +28,12 @@ public class RobotElevator extends SubsystemBase {
       return this.runEnd(
           () -> {
             SmartDashboard.putNumber("Elevator Point", manualAngle);
-            if (elevatorEncoderValue > (manualAngle + 2)) {
+            if (elevatorEncoderValue > (manualAngle + 10)) {
               setSpeed(-.2);
-            } else if (elevatorEncoderValue < (manualAngle - 2)) {
+            } else if (elevatorEncoderValue < (manualAngle - 10)) {
               setSpeed(.2);
             } else {
-              setSpeed((manualAngle - elevatorEncoderValue) * .1);
+              setSpeed((manualAngle - elevatorEncoderValue) * .05);
             }
           },
           () -> {

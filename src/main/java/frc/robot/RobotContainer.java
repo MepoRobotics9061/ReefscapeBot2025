@@ -105,12 +105,12 @@ public class RobotContainer {
       )
     );
 
-    // m_robotElevator.setDefaultCommand(
-    //   new RunCommand(
-    //     () -> m_robotElevator.voidElevatorMove(SmartDashboard.getNumber("Elevator", 0)), 
-    //     m_robotElevator
-    //   )
-    // );
+    m_robotElevator.setDefaultCommand(
+      new RunCommand(
+        () -> m_robotElevator.voidElevatorMove(SmartDashboard.getNumber("Elevator Point", 0)), 
+        m_robotElevator
+      )
+    );
 
     // Configure the button bindings
     configureButtonBindings();
@@ -178,14 +178,20 @@ public class RobotContainer {
       m_gameCommands.algaePivotPositionSetCommand(-20)
     );
 
-    operator.povUp().and(operator.button(10)).whileTrue(
-      //m_gameCommands.elevatorMoveCommand(0)
-      m_robotElevator.elevatorMove(.5)
+    operator.povDown().and(operator.button(10)).whileTrue(
+      m_gameCommands.elevatorMoveCommand(0)
     );
 
-    operator.povDown().and(operator.button(10)).whileTrue(
-      //m_gameCommands.elevatorMoveCommand(10)
-      m_robotElevator.elevatorMove(-.5)
+    operator.povLeft().and(operator.button(10)).whileTrue(
+      m_gameCommands.elevatorMoveCommand(-20)
+    );
+
+    operator.povUp().and(operator.button(10)).whileTrue(
+      m_gameCommands.elevatorMoveCommand(-40)
+    );
+
+    operator.povRight().and(operator.button(10)).whileTrue(
+      m_gameCommands.elevatorMoveCommand(-60)
     );
 
     operator.button(5).whileTrue(
