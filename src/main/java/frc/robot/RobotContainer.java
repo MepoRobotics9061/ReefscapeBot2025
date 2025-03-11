@@ -59,7 +59,7 @@ public class RobotContainer {
   /* Commands */
   
   private final GameCommands m_gameCommands;
-  private final Autos m_autoCommands;
+  private final Autos m_autos;
   private final SendableChooser<Command> m_autoChooser;
 
 
@@ -77,19 +77,17 @@ public class RobotContainer {
       s_Swerve
     );
 
-        m_autoCommands = new Autos(
-        m_gameCommands,
-        m_robotDrive,
-        m_robotLaunch,
-        m_robotArm,
-        m_robotGyro,
-        m_robotCamera,
-        m_robotHook
-      );
+    m_autos = new Autos(
+      m_gameCommands,
+      m_robotDrive,
+      m_robotLaunch,
+      m_robotArm,
+      m_robotGyro,
+      m_robotCamera,
+      m_robotHook
+    );
 
     m_autoChooser = new SendableChooser<Command>();
-
-
 
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
@@ -232,10 +230,10 @@ public class RobotContainer {
   }
 
   private void configureAutos() {
-    m_autoChooser.setDefaultOption("2", m_autoCommands.autoCommand2());
-    m_autoChooser.addOption("1", m_autoCommands.autoCommand1());
-    m_autoChooser.addOption("2", m_autoCommands.autoCommand2());
-    m_autoChooser.addOption("3", m_autoCommands.autoCommand3());
+    m_autoChooser.setDefaultOption("2", m_autos.autoCommand2());
+    m_autoChooser.addOption("1", m_autos.autoCommand1());
+    m_autoChooser.addOption("2", m_autos.autoCommand2());
+    m_autoChooser.addOption("3", m_autos.autoCommand3());
 
 
     SmartDashboard.putData("AutoCommand", m_autoChooser);
