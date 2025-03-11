@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.Autos;
-import frc.robot.autos.exampleAuto;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.GameCommands;
 import frc.robot.commands.TeleopSwerve;
@@ -78,13 +77,7 @@ public class RobotContainer {
     );
 
     m_autos = new Autos(
-      m_gameCommands,
-      m_robotDrive,
-      m_robotLaunch,
-      m_robotArm,
-      m_robotGyro,
-      m_robotCamera,
-      m_robotHook
+      m_gameCommands
     );
 
     m_autoChooser = new SendableChooser<Command>();

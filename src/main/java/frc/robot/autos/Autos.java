@@ -4,55 +4,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.GameCommands;
-import frc.robot.subsystems.RobotArm;
-import frc.robot.subsystems.RobotCamera;
-import frc.robot.subsystems.RobotDrive;
-import frc.robot.subsystems.RobotGyro;
-import frc.robot.subsystems.RobotHook;
-import frc.robot.subsystems.RobotLaunch;
 
 public class Autos {
 
   private final GameCommands m_gameCommands;
 
-  private final RobotDrive m_robotDrive;
-
-  private final RobotLaunch m_robotLaunch;
-
-  private final RobotArm m_robotArm;
-
-  private final RobotGyro m_robotGyro;
-
-  private final RobotCamera m_robotCamera;
-
-  private final RobotHook m_robotHook;
-
   double gyroAngle;
-  
 
   public Autos(
-    GameCommands gameCommands,
-    RobotDrive robotDrive,
-    RobotLaunch robotLaunch,
-    RobotArm robotArm,
-    RobotGyro robotGyro,
-    RobotCamera robotCamera,
-    RobotHook robotHook
+    GameCommands gameCommands
   ) {
     m_gameCommands = gameCommands;
-
-    m_robotDrive = robotDrive;
-
-    m_robotLaunch = robotLaunch;
-
-    m_robotArm = robotArm;
-
-    m_robotGyro = robotGyro;
-
-    m_robotCamera = robotCamera;
-
-    m_robotHook = robotHook;
-    
   }
 
   public Command autoCommand1() {
