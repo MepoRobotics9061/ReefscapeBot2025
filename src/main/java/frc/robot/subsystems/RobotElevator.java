@@ -33,7 +33,7 @@ public class RobotElevator extends SubsystemBase {
             } else if (elevatorEncoderValue < (manualAngle - 10)) {
               setSpeed(.2);
             } else {
-              setSpeed((manualAngle - elevatorEncoderValue) * .05);
+              setSpeed((manualAngle - elevatorEncoderValue) * .02);
             }
           },
           () -> {
