@@ -20,51 +20,32 @@ public class Autos {
   public Command autoCommand1() {
     return Commands
       .sequence(
-        m_gameCommands.moveArmLP().withTimeout(2),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15),
-        m_gameCommands.moveArmIP().alongWith(m_gameCommands.turnLAngle()).withTimeout(.9),
-        m_gameCommands
-          .runIntakeCommand()
-          .alongWith(m_gameCommands.moveArmIP())
-          .alongWith(m_gameCommands.runBDrive())
-          .withTimeout(1.75),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runFDrive())
-          .withTimeout(2),
-        m_gameCommands.turnCenter().withTimeout(.60),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15)
+        m_gameCommands.driveCommand(0, 0, gyroAngle - 120).withTimeout(2),
+        m_gameCommands.driveCommand(.5, 0, 0).withTimeout(1),
+        m_gameCommands.coralPrepCommand().withTimeout(1),
+        m_gameCommands.elevatorMoveCommand(-20).withTimeout(1),
+        m_gameCommands.coralPivotPositionSetCommand(-20).withTimeout(1),
+        m_gameCommands.runCoralLaunchCommand(1).withTimeout(1),
+        m_gameCommands.coralPivotPositionSetCommand(0).withTimeout(1),
+        m_gameCommands.elevatorMoveCommand(-10).withTimeout(1),
+        m_gameCommands.algaePivotPositionSetCommand(-10).withTimeout(1),
+        m_gameCommands.runAlgaeLaunchCommand(1).withTimeout(1)
       )
       .withName("autoCommand");
   }
   public Command autoCommand2() {
     return Commands
       .sequence(
-        // m_gameCommands.runRelayOn(),
-        m_gameCommands.moveArmLP().withTimeout(2),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15),
-        m_gameCommands.moveArmIP().withTimeout(1),
-        m_gameCommands
-          .runIntakeCommand()
-          .alongWith(m_gameCommands.runBDrive())
-          .withTimeout(1.25),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runFDrive())
-          .withTimeout(1.25),
-        m_gameCommands
-          .moveArmLP()
-          .alongWith(m_gameCommands.runLaunchCommand())
-          .withTimeout(2.15)
+        m_gameCommands.driveCommand(0, 0, gyroAngle - 180).withTimeout(2),
+        m_gameCommands.driveCommand(.5, 0, 0).withTimeout(1),
+        m_gameCommands.coralPrepCommand().withTimeout(1),
+        m_gameCommands.elevatorMoveCommand(-10).withTimeout(1),
+        m_gameCommands.coralPivotPositionSetCommand(-20).withTimeout(1),
+        m_gameCommands.runCoralLaunchCommand(1).withTimeout(1),
+        m_gameCommands.coralPivotPositionSetCommand(0).withTimeout(1),
+        m_gameCommands.elevatorMoveCommand(-10).withTimeout(1),
+        m_gameCommands.algaePivotPositionSetCommand(-10).withTimeout(1),
+        m_gameCommands.runAlgaeLaunchCommand(1).withTimeout(1)
       )
       .withName("autoCommand");
   }
@@ -72,26 +53,16 @@ public class Autos {
 public Command autoCommand3() {
   return Commands
     .sequence(
-      // m_gameCommands.runRelayOn(),
-      m_gameCommands.moveArmLP().withTimeout(2),
-      m_gameCommands
-        .moveArmLP()
-        .alongWith(m_gameCommands.runLaunchCommand())
-        .withTimeout(2.15),
-      m_gameCommands.moveArmIP().alongWith(m_gameCommands.turnRAngle()).withTimeout(1.5),
-      m_gameCommands
-        .runIntakeCommand()
-        .alongWith(m_gameCommands.runBDrive())
-        .withTimeout(2),
-      m_gameCommands
-        .moveArmLP()
-        .alongWith(m_gameCommands.runFDrive())
-        .withTimeout(2),
-      m_gameCommands.turnCenter().alongWith(m_gameCommands.moveArmLP()).withTimeout(.65),
-      m_gameCommands
-        .moveArmLP()
-        .alongWith(m_gameCommands.runLaunchCommand())
-        .withTimeout(2.15)
+      m_gameCommands.driveCommand(0, 0, gyroAngle - 240).withTimeout(2),
+      m_gameCommands.driveCommand(.5, 0, 0).withTimeout(1),
+      m_gameCommands.coralPrepCommand().withTimeout(1),
+      m_gameCommands.elevatorMoveCommand(-20).withTimeout(1),
+      m_gameCommands.coralPivotPositionSetCommand(-20).withTimeout(1),
+      m_gameCommands.runCoralLaunchCommand(1).withTimeout(1),
+      m_gameCommands.coralPivotPositionSetCommand(0).withTimeout(1),
+      m_gameCommands.elevatorMoveCommand(-10).withTimeout(1),
+      m_gameCommands.algaePivotPositionSetCommand(-10).withTimeout(1),
+      m_gameCommands.runAlgaeLaunchCommand(1).withTimeout(1)
     )
     .withName("autoCommand");
 }
