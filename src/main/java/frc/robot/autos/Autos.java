@@ -10,6 +10,10 @@ public class Autos {
   private final GameCommands m_gameCommands;
 
   double gyroAngle;
+  double elevatorPoint;
+  double coralPivotPoint;
+  double algaePivotPoint;
+  double tagArea;
 
   public Autos(
     GameCommands gameCommands
@@ -69,6 +73,10 @@ public Command autoCommand3() {
 
 public void robotPeriodic(){
   gyroAngle = SmartDashboard.getNumber("Gyro", 0);
+  elevatorPoint = SmartDashboard.getNumber("Elevator Point", 0);
+  coralPivotPoint = SmartDashboard.getNumber("Coral Pivot Point", 0);
+  algaePivotPoint = SmartDashboard.getNumber("Algae Pivot Point", 0);
+  tagArea = SmartDashboard.getNumber("Tag Area", 0);
 }
 
 }
