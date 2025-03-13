@@ -194,7 +194,7 @@ public class RobotContainer {
       m_gameCommands.elevatorMoveCommand(-60)
     );
 
-    operator.button(5).whileTrue(
+    operator.button(6).whileTrue(
       m_gameCommands.runCoralIntakeCommand(1)
     );
 
@@ -202,7 +202,7 @@ public class RobotContainer {
       m_gameCommands.runCoralLaunchCommand(1)
     );
     
-    operator.button(6).whileTrue(
+    operator.button(5).whileTrue(
       m_gameCommands.runAlgaeIntakeCommand(1)
     );
 
