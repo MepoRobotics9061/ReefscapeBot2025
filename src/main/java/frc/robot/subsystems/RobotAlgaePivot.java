@@ -84,6 +84,6 @@ public class RobotAlgaePivot extends SubsystemBase {
 
   @Override public void periodic() {
     pivotEncoderValue = pivotEncoder.getPosition();
-    SmartDashboard.putNumber("Coral Pivot Encoder", pivotEncoderValue);
+    SmartDashboard.putNumber("Algae Pivot Encoder", pivotEncoderValue);
   }
 }

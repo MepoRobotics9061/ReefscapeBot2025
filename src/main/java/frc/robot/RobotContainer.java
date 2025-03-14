@@ -23,6 +23,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotElevator;
+import frc.robot.subsystems.RobotHang;
 import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
 
@@ -53,6 +54,8 @@ public class RobotContainer {
 
   private final RobotLights m_robotLights = new RobotLights();
 
+  private final RobotHang m_robotHang = new RobotHang();
+
   private final Swerve s_Swerve = new Swerve(m_robotCamera); 
   
   /* Commands */
@@ -73,6 +76,7 @@ public class RobotContainer {
       m_robotCoralPivot,
       m_robotElevator,
       m_robotLights,
+      m_robotHang,
       s_Swerve
     );
 
@@ -147,39 +151,43 @@ public class RobotContainer {
         */
 
     operator.button(1).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-45)
+      //m_gameCommands.coralPivotPositionSetCommand(-45)
+      m_gameCommands.manualCoralPivotMove(-45)
     );
 
     operator.button(3).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-35)
+      //m_gameCommands.coralPivotPositionSetCommand(-35)
+      m_gameCommands.manualCoralPivotMove(-35)
     );
 
     operator.button(4).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-15)
+      //m_gameCommands.coralPivotPositionSetCommand(-15)
+      m_gameCommands.manualCoralPivotMove(-15)
     );
 
     operator.button(2).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-5)
+      //m_gameCommands.coralPivotPositionSetCommand(-5)
+      m_gameCommands.manualCoralPivotMove(-5)
     );
 
-    operator.povDown().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-5)
-    );
+    // operator.povDown().and(operator.button(10).negate()).onTrue(
+    //   m_gameCommands.algaePivotPositionSetCommand(-5)
+    // );
 
-    operator.povLeft().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-10)
-    );
+    // operator.povLeft().and(operator.button(10).negate()).onTrue(
+    //   m_gameCommands.algaePivotPositionSetCommand(-10)
+    // );
 
-    operator.povUp().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-15)
-    );
+    // operator.povUp().and(operator.button(10).negate()).onTrue(
+    //   m_gameCommands.algaePivotPositionSetCommand(-15)
+    // );
 
-    operator.povRight().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-20)
-    );
+    // operator.povRight().and(operator.button(10).negate()).onTrue(
+    //   m_gameCommands.algaePivotPositionSetCommand(-20)
+    // );
 
     operator.povDown().and(operator.button(10)).whileTrue(
-      m_gameCommands.elevatorMoveCommand(0)
+      m_gameCommands.elevatorMoveCommand(-5)
     );
 
     operator.povLeft().and(operator.button(10)).whileTrue(

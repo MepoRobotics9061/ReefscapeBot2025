@@ -8,6 +8,7 @@ import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotCoral;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotElevator;
+import frc.robot.subsystems.RobotHang;
 import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
 import frc.robot.commands.LimeLightCenterATagCommand;
@@ -31,6 +32,8 @@ public class GameCommands {
 
   private final RobotLights m_robotLights;
 
+  private final RobotHang m_robotHang;
+
   private final Swerve s_Swerve;
 
   double gyro;
@@ -51,6 +54,7 @@ public class GameCommands {
     RobotCoralPivot robotCoralPivot,
     RobotElevator robotElevator,
     RobotLights robotLights,
+    RobotHang robotHang,
     Swerve swerve
   ) {
     m_robotAlgae = robotAlgae;
@@ -66,6 +70,8 @@ public class GameCommands {
     m_robotElevator = robotElevator;
 
     m_robotLights = robotLights;
+
+    m_robotHang = robotHang;
 
     s_Swerve = swerve;
 
@@ -109,6 +115,14 @@ public class GameCommands {
 
   public Command elevatorMoveCommand(double desiredValue) {
     return m_robotElevator.manualElevatorMove(desiredValue);
+  }
+
+  public Command hangCloseCommand() {
+    return m_robotHang.hangClose();
+  }
+
+  public Command hangOpenCommand() {
+    return m_robotHang.hangOpen();
   }
 
   public Command driveCommand(double vertical, double horizontal, double rotate) {

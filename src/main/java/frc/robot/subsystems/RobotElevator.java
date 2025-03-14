@@ -44,10 +44,10 @@ public class RobotElevator extends SubsystemBase {
   
     public void voidElevatorMove(double manualAngle) {
       SmartDashboard.putNumber("Elevator Point", manualAngle);
-      if (elevatorEncoderValue > (manualAngle + 2)) {
-        setSpeed(-.2);
-      } else if (elevatorEncoderValue < (manualAngle - 2)) {
-        setSpeed(.2);
+      if (elevatorEncoderValue > (manualAngle + 4)) {
+        setSpeed(-.4);
+      } else if (elevatorEncoderValue < (manualAngle - 1)) {
+        setSpeed(.1);
       } else {
         setSpeed((manualAngle - elevatorEncoderValue) * .1);
       }
