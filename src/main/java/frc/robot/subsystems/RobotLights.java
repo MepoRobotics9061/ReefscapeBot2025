@@ -11,7 +11,7 @@ public class RobotLights extends SubsystemBase {
 CANdle m_led;
 
 public RobotLights() {
-    final int CANdleDeviceID = 15;
+    final int CANdleDeviceID = 17;
     m_led = new CANdle(CANdleDeviceID);
     CANdleConfiguration config = new CANdleConfiguration();
     config.stripType = LEDStripType.RGB; // set the strip type to RGB
