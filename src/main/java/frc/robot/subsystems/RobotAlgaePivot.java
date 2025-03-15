@@ -30,7 +30,7 @@ public class RobotAlgaePivot extends SubsystemBase {
     public Command manualPivotMove(double manualAngle) {
       return this.runEnd(
           () -> {
-            SmartDashboard.putNumber("Coral Pivot Point", manualAngle);
+            SmartDashboard.putNumber("Algae Pivot Point", manualAngle);
             if (pivotEncoderValue > (manualAngle + 2)) {
               setSpeed(-.2);
             } else if (pivotEncoderValue < (manualAngle - 2)) {
@@ -64,7 +64,7 @@ public class RobotAlgaePivot extends SubsystemBase {
     }
   
     public void voidPivotMove(double manualAngle) {
-      SmartDashboard.putNumber("Coral Pivot Point", manualAngle);
+      SmartDashboard.putNumber("Algae Pivot Point", manualAngle);
       if (pivotEncoderValue > (manualAngle + 2)) {
         setSpeed(-.2);
       } else if (pivotEncoderValue < (manualAngle - 2)) {
