@@ -51,7 +51,7 @@ public class RobotCoralPivot extends SubsystemBase {
           coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
           if(algaeCurrentPosition < -4) {
             SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
-          } else if(algaeCurrentPosition > -1 && algaeCurrentPosition < -2){
+          } else if(algaeCurrentPosition > -1 || algaeCurrentPosition < -2){
             if(coralPivotPoint > -35) {
               SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
             }

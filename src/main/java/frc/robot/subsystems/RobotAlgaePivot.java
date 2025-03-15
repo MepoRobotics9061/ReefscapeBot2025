@@ -56,7 +56,7 @@ public class RobotAlgaePivot extends SubsystemBase {
             if(algaeCurrentPosition < -2.5 && algaePivotPoint < -2.5){
               SmartDashboard.putNumber("Coral Pivot Point", algaePivotPoint);
             }
-          } else if(algaePivotPoint < -4) {
+          } else if(algaePivotPoint < -4 && algaeCurrentPosition < -4) {
             SmartDashboard.putNumber("Coral Pivot Point", algaePivotPoint);
           }
         }
