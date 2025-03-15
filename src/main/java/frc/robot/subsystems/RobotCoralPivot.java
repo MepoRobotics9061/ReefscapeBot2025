@@ -16,7 +16,7 @@ public class RobotCoralPivot extends SubsystemBase {
 
   private double pivotEncoderValue;
 
-  private double algaePivotPoint;
+  private double algaeCurrentPosition;
 
   private double coralCurrentPosition;
 
@@ -47,11 +47,11 @@ public class RobotCoralPivot extends SubsystemBase {
     public Command pivotPositionSet(double coralPivotPoint) {
       return this.run(
         () -> {
-          algaePivotPoint = SmartDashboard.getNumber("Algae Pivot Point", 0);
-          coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Point", 0);
-          if(algaePivotPoint < -4) {
+          algaeCurrentPosition = SmartDashboard.getNumber("Algae Pivot Encoder", 0);
+          coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
+          if(algaeCurrentPosition < -4) {
             SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
-          } else if(algaePivotPoint > -1 && algaePivotPoint < -2){
+          } else if(algaeCurrentPosition > -1 && algaeCurrentPosition < -2){
             if(coralPivotPoint > -35) {
               SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
             }
