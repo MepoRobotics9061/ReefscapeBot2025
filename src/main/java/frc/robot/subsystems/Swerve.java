@@ -86,7 +86,9 @@ public class Swerve extends SubsystemBase {
   }
 
   public void coralPrepVoid(){
-    drive(new Translation2d(-(15 - m_robotCamera.tagArea)/30, m_robotCamera.tagX/20), /*gyroATagSpinAmount*/ 0, false, true);
+    if(m_robotCamera.tagArea != 0){
+      drive(new Translation2d(-(15 - m_robotCamera.tagArea)/30, m_robotCamera.tagX/20), /*gyroATagSpinAmount*/ 0, false, true);
+    }
   }
 
   public void rotateUntilVoid(double rotateAmount){

@@ -90,7 +90,6 @@ public void robotPeriodic(){
   elevatorPoint = SmartDashboard.getNumber("Elevator Point", 0);
   coralPivotPoint = SmartDashboard.getNumber("Coral Pivot Point", 0);
   algaePivotPoint = SmartDashboard.getNumber("Algae Pivot Point", 0);
-  tagArea = SmartDashboard.getNumber("Tag Area", 0);
   timeSpinning = SmartDashboard.getNumber("Autonomous Time Spinning", 2);
   timeForward = SmartDashboard.getNumber("Autonomous Time Forward", 1);
   timeCentering = SmartDashboard.getNumber("Autonomous Time Centering", 1);
@@ -101,10 +100,9 @@ public void robotPeriodic(){
   speedDriving = SmartDashboard.getNumber("Autonomous Speed Driving", .5);
   speedLaunching = SmartDashboard.getNumber("Autonomous Speed Launching", .5);
   speedIntaking = SmartDashboard.getNumber("Autonomous Speed Intaking", .5);
-  positionEleTop = SmartDashboard.getNumber("Autonomous Position Elevator Top", -20);
-  positionEleBottom = SmartDashboard.getNumber("Autonomous Position Elevator Bottom", -10);
-  positionCoralPivot = SmartDashboard.getNumber("Autonomous Position Coral Pivot", -20);
-  positionAlgaePivot = SmartDashboard.getNumber("Autonomous Position Algae Pivot", -10);
+  positionEleTop = SmartDashboard.getNumber("Autonomous Position Elevator Top", -95);
+  positionEleBottom = SmartDashboard.getNumber("Autonomous Position Elevator Bottom", -5);
+  positionCoralPivot = SmartDashboard.getNumber("Autonomous Position Coral Pivot", -700);
+  positionAlgaePivot = SmartDashboard.getNumber("Autonomous Position Algae Pivot", -4);
 }
-
 }
