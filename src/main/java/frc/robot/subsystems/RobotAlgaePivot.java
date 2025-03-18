@@ -27,6 +27,20 @@ public class RobotAlgaePivot extends SubsystemBase {
     pivotEncoder = pivotWheel.getEncoder();
     }
 
+    public Command pivotPositionSet(double algaePivotPoint) {
+      return this.run(
+        () -> {
+          coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
+          algaeCurrentPosition = SmartDashboard.getNumber("Algae Pivot Encoder", 0);
+          if(coralCurrentPosition > -600) {
+            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
+          } else if((algaeCurrentPosition < -3) && (algaePivotPoint < -3)) {
+            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
+          }
+        }
+      );
+    }
+
     public Command manualPivotMove(double manualAngle) {
       return this.runEnd(
           () -> {
@@ -45,24 +59,6 @@ public class RobotAlgaePivot extends SubsystemBase {
         );
     }
 
-    public Command pivotPositionSet(double algaePivotPoint) {
-      return this.run(
-        () -> {
-          coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
-          algaeCurrentPosition = SmartDashboard.getNumber("Algae Pivot Encoder", 0);
-          if(coralCurrentPosition > -20) {
-            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
-          } else if(coralCurrentPosition < -20) {
-            if(algaeCurrentPosition < -2.5 && algaePivotPoint < -2.5){
-              SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
-            }
-          } else if(algaePivotPoint < -4 && algaeCurrentPosition < -4) {
-            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
-          }
-        }
-      );
-    }
-  
     public void voidPivotMove(double manualAngle) {
       SmartDashboard.putNumber("Algae Pivot Point", manualAngle);
       if (pivotEncoderValue > (manualAngle + 2)) {
@@ -72,6 +68,16 @@ public class RobotAlgaePivot extends SubsystemBase {
       } else {
         setSpeed((manualAngle - pivotEncoderValue) * .1);
       }
+    }
+    
+    public Command testingSpeed(double speed) {
+      return this.runEnd(
+        () -> {
+          setSpeed(speed);
+        }, () -> {
+          stop();
+        }
+      );
     }
   
     public void setSpeed(double speed) {

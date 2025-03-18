@@ -14,14 +14,14 @@ public class RobotAlgae extends SubsystemBase {
 
   public RobotAlgae() {
     final int wheelDeviceID = 14;
-    wheel = new SparkMax(wheelDeviceID, MotorType.kBrushless);
+    wheel = new SparkMax(wheelDeviceID, MotorType.kBrushed);
     limitSwitch = new DigitalInput(6);
   }
 
   public Command launch(double speed) {
     return this.runEnd(
         () -> {
-          setWheelSpeed(-speed);
+          setWheelSpeed(speed);
         },
         () -> {
           stop();
@@ -32,11 +32,11 @@ public class RobotAlgae extends SubsystemBase {
   public Command intake(double speed) {
     return this.runEnd(
         () -> {
-          if(limitSwitch.get() == false) {
-            setWheelSpeed(speed);
-          } else {
-            stop();
-          }
+          // if(limitSwitch.get() == false) {
+            setWheelSpeed(-speed);
+          // } else {
+          //   stop();
+          // }
         },
         () -> {
           stop();

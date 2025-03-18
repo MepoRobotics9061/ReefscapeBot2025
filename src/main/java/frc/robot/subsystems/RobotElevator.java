@@ -15,13 +15,14 @@ public class RobotElevator extends SubsystemBase {
   private RelativeEncoder elevatorEncoder;
 
   private double elevatorEncoderValue;
-  private DutyCycleEncoder angleEncoder;
+  
+  // private DutyCycleEncoder angleEncoder;
 
   public RobotElevator() {
     final int pivotWheelDeviceID = 9;
     elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     elevatorEncoder = elevatorWheel.getEncoder();
-    angleEncoder = new DutyCycleEncoder(9);
+    // angleEncoder = new DutyCycleEncoder(9);
     }
 
     public Command manualElevatorMove(double manualAngle) {
@@ -79,6 +80,6 @@ public class RobotElevator extends SubsystemBase {
   @Override public void periodic() {
     elevatorEncoderValue = elevatorEncoder.getPosition();
     SmartDashboard.putNumber("Elevator Encoder", elevatorEncoderValue);
-    SmartDashboard.putNumber("Elevator Absolute Encoder", angleEncoder.get());
+    // SmartDashboard.putNumber("Elevator Absolute Encoder", angleEncoder.get());
   }
 }

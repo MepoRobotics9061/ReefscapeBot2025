@@ -52,9 +52,9 @@ public class RobotContainer {
 
   private final RobotCamera m_robotCamera = new RobotCamera();
 
-  private final RobotLights m_robotLights = new RobotLights();
-
   private final RobotHang m_robotHang = new RobotHang();
+
+  private final RobotLights m_robotLights = new RobotLights();
 
   private final Swerve s_Swerve = new Swerve(m_robotCamera); 
   
@@ -75,8 +75,8 @@ public class RobotContainer {
       m_robotCoral,
       m_robotCoralPivot,
       m_robotElevator,
-      m_robotLights,
       m_robotHang,
+      m_robotLights,
       s_Swerve
     );
 
@@ -97,14 +97,14 @@ public class RobotContainer {
 
     m_robotCoralPivot.setDefaultCommand(
       new RunCommand(
-        () -> m_robotCoralPivot.voidPivotMove(SmartDashboard.getNumber("Coral Pivot Point", 0)), 
+        () -> m_robotCoralPivot.voidPivotMove(SmartDashboard.getNumber("Coral Pivot Point", -100)), 
         m_robotCoralPivot
       )
     );
 
     m_robotAlgaePivot.setDefaultCommand(
       new RunCommand(
-        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", 0)), 
+        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", -1)), 
         m_robotAlgaePivot
       )
     );
@@ -137,12 +137,13 @@ public class RobotContainer {
     // );
 
     /*  XBox:
-          5/6 = Intake
+          5, 6 [Bumpers] = Intake
           Trigger = Fire
-          10 = Toggle
-          POV = Algae Pivot/Elevator
-          1/2/3/4 = Coral Pivot
-          7/8 = Lights
+          1, 2, 3, 4 [A, B, X, Y] = (Coral)/(Algae) Pivots
+          9 [Left Stick]= Toggle Pivots
+          POV [D-Pad] = (Elevator)/(Half Elevator)
+          10 [Right Stick] = Toggle Elevator
+          7, 8 [Select and Start]= Lights
 
         Joystick:
           7 = Center A Tag
@@ -150,72 +151,76 @@ public class RobotContainer {
           11 = Processor A Tag
         */
 
-    operator.button(1).onTrue(
-      //m_gameCommands.coralPivotPositionSetCommand(-45)
-      m_gameCommands.manualCoralPivotMove(-45)
+    operator.button(1).and(operator.button(9).negate()).onTrue(
+      m_gameCommands.coralPivotPositionSetCommand(-700)
+      // m_gameCommands.manualCoralPivotMove(-700)
+      //m_robotCoralPivot.testingSpeed(-.1)
     );
 
-    operator.button(3).onTrue(
-      //m_gameCommands.coralPivotPositionSetCommand(-35)
-      m_gameCommands.manualCoralPivotMove(-35)
+    operator.button(3).and(operator.button(9).negate()).onTrue(
+      m_gameCommands.coralPivotPositionSetCommand(-500)
+      // m_gameCommands.manualCoralPivotMove(-700)
+      // m_robotCoralPivot.testingSpeed(.1)
     );
 
-    operator.button(4).onTrue(
-      //m_gameCommands.coralPivotPositionSetCommand(-15)
-      m_gameCommands.manualCoralPivotMove(-15)
+    operator.button(4).and(operator.button(9).negate()).onTrue(
+      m_gameCommands.coralPivotPositionSetCommand(-100)
+      // m_gameCommands.manualCoralPivotMove(-100)
     );
 
-    operator.button(2).onTrue(
-      //m_gameCommands.coralPivotPositionSetCommand(-5)
-      m_gameCommands.manualCoralPivotMove(-5)
+    operator.button(1).and(operator.button(9)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-1)
+      //m_robotAlgaePivot.testingSpeed(-.1)
     );
 
-    // operator.povDown().and(operator.button(10).negate()).onTrue(
-    //   m_gameCommands.algaePivotPositionSetCommand(-5)
-    // );
+    operator.button(3).and(operator.button(9)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-3)
+    );
 
-    // operator.povLeft().and(operator.button(10).negate()).onTrue(
-    //   m_gameCommands.algaePivotPositionSetCommand(-10)
-    // );
+    operator.button(4).and(operator.button(9)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-4)
+      //m_robotAlgaePivot.testingSpeed(.1)
 
-    // operator.povUp().and(operator.button(10).negate()).onTrue(
-    //   m_gameCommands.algaePivotPositionSetCommand(-15)
-    // );
+    );
 
-    // operator.povRight().and(operator.button(10).negate()).onTrue(
-    //   m_gameCommands.algaePivotPositionSetCommand(-20)
-    // );
+    operator.button(2).and(operator.button(9)).onTrue(
+      m_gameCommands.algaePivotPositionSetCommand(-5)
+    );
 
-    operator.povDown().and(operator.button(10)).whileTrue(
+    operator.povDown().and(operator.button(10).negate()).onTrue(
       m_gameCommands.elevatorMoveCommand(-5)
     );
 
-    operator.povLeft().and(operator.button(10)).whileTrue(
-      m_gameCommands.elevatorMoveCommand(-20)
+    operator.povLeft().and(operator.button(10).negate()).onTrue(
+      m_gameCommands.elevatorMoveCommand(-35)
     );
 
-    operator.povUp().and(operator.button(10)).whileTrue(
-      m_gameCommands.elevatorMoveCommand(-40)
+    operator.povUp().and(operator.button(10).negate()).onTrue(
+      m_gameCommands.elevatorMoveCommand(-95)
     );
 
-    operator.povRight().and(operator.button(10)).whileTrue(
-      m_gameCommands.elevatorMoveCommand(-60)
+    operator.povDown().and(operator.button(10)).onTrue(
+      m_gameCommands.elevatorMoveCommand(-50)
     );
 
-    operator.button(6).whileTrue(
-      m_gameCommands.runCoralIntakeCommand(1)
+    operator.povUp().and(operator.button(10)).onTrue(
+      m_gameCommands.elevatorMoveCommand(-70)
     );
 
-    operator.rightBumper().whileTrue(
-      m_gameCommands.runCoralLaunchCommand(1)
-    );
-    
-    operator.button(5).whileTrue(
+    operator.leftTrigger().whileTrue(
       m_gameCommands.runAlgaeIntakeCommand(1)
     );
 
     operator.leftBumper().whileTrue(
       m_gameCommands.runAlgaeLaunchCommand(1)
+    );
+
+    operator.rightTrigger().whileTrue(
+      m_gameCommands.runCoralIntakeCommand(1)
+    );
+
+    operator.rightBumper().whileTrue(
+      m_gameCommands.runCoralLaunchCommand(1)
     );
 
     driver.button(7).whileTrue(
@@ -226,22 +231,21 @@ public class RobotContainer {
       m_gameCommands.coralPrepCommand()
     );
 
-    operator.button(5).whileTrue(
+    operator.button(7).whileTrue(
       m_gameCommands.lightSetCommand("blue", "left")
     );
 
-    operator.button(3).whileTrue(
+    operator.button(8).whileTrue(
       m_gameCommands.lightSetCommand("red", "left")
     );
 
   }
 
   private void configureAutos() {
-    m_autoChooser.setDefaultOption("2", m_autos.autoCommand2());
     m_autoChooser.addOption("1", m_autos.autoCommand1());
     m_autoChooser.addOption("2", m_autos.autoCommand2());
     m_autoChooser.addOption("3", m_autos.autoCommand3());
-
+    m_autoChooser.setDefaultOption("2", m_autos.autoCommand2());
 
     SmartDashboard.putData("AutoCommand", m_autoChooser);
   }

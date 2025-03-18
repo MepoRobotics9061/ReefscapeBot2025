@@ -30,9 +30,9 @@ public class GameCommands {
 
   private final RobotElevator m_robotElevator;
 
-  private final RobotLights m_robotLights;
-
   private final RobotHang m_robotHang;
+
+  private final RobotLights m_robotLights;
 
   private final Swerve s_Swerve;
 
@@ -53,8 +53,8 @@ public class GameCommands {
     RobotCoral robotCoral,
     RobotCoralPivot robotCoralPivot,
     RobotElevator robotElevator,
-    RobotLights robotLights,
     RobotHang robotHang,
+    RobotLights robotLights,
     Swerve swerve
   ) {
     m_robotAlgae = robotAlgae;
@@ -69,9 +69,9 @@ public class GameCommands {
 
     m_robotElevator = robotElevator;
 
-    m_robotLights = robotLights;
-
     m_robotHang = robotHang;
+
+    m_robotLights = robotLights;
 
     s_Swerve = swerve;
 
