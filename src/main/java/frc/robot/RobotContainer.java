@@ -172,7 +172,7 @@ public class RobotContainer {
     );
 
     operator.button(10).onTrue(
-      m_gameCommands.setControllerModeCommand("Coral")
+      m_gameCommands.setControllerModeCommand("Algae")
     );
 
     if(controllerMode == "Coral"){
