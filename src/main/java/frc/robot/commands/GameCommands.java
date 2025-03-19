@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotAlgae;
@@ -47,16 +47,15 @@ public class GameCommands {
   double tagID;
 
   public GameCommands(
-    RobotAlgae robotAlgae,
-    RobotAlgaePivot robotAlgaePivot,
-    RobotCamera robotCamera,
-    RobotCoral robotCoral,
-    RobotCoralPivot robotCoralPivot,
-    RobotElevator robotElevator,
-    RobotHang robotHang,
-    RobotLights robotLights,
-    Swerve swerve
-  ) {
+      RobotAlgae robotAlgae,
+      RobotAlgaePivot robotAlgaePivot,
+      RobotCamera robotCamera,
+      RobotCoral robotCoral,
+      RobotCoralPivot robotCoralPivot,
+      RobotElevator robotElevator,
+      RobotHang robotHang,
+      RobotLights robotLights,
+      Swerve swerve) {
     m_robotAlgae = robotAlgae;
 
     m_robotAlgaePivot = robotAlgaePivot;
@@ -106,11 +105,11 @@ public class GameCommands {
   }
 
   // public Command pivotUpCommand(double speed) {
-  //   return m_robotCoralPivot.pivotUp(speed);
+  // return m_robotCoralPivot.pivotUp(speed);
   // }
 
   // public Command pivotDownCommand(double speed) {
-  //   return m_robotCoralPivot.pivotDown(speed);
+  // return m_robotCoralPivot.pivotDown(speed);
   // }
 
   public Command elevatorMoveCommand(double desiredValue) {
@@ -127,30 +126,30 @@ public class GameCommands {
 
   public Command driveCommand(double vertical, double horizontal, double rotate) {
     return new TeleopSwerve(
-      s_Swerve,
-      () -> vertical,
-      () -> horizontal,
-      () -> rotate,
-      () -> true);
+        s_Swerve,
+        () -> vertical,
+        () -> horizontal,
+        () -> rotate,
+        () -> true);
   }
 
-  public Command driveRotateUntil180Command(double rotateAmount){
+  public Command driveRotateUntil180Command(double rotateAmount) {
     return new RotateUntil180Command(s_Swerve);
   }
 
-  public Command centerATagCommand(){
+  public Command centerATagCommand() {
     return new LimeLightCenterATagCommand(s_Swerve);
   }
 
-  public Command coralPrepCommand(){
+  public Command coralPrepCommand() {
     return new LimeLightCoralPrepCommand(s_Swerve);
   }
 
-  public Command lightSetCommand(String color, String side){
+  public Command lightSetCommand(String color, String side) {
     return m_robotLights.lightArea(color, side);
   }
 
-  public Command setControllerModeCommand(String mode){
+  public Command setControllerModeCommand(String mode) {
     return m_robotElevator.setControllerMode(mode);
   }
 }
