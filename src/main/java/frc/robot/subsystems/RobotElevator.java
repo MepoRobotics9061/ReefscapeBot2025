@@ -64,6 +64,10 @@ public class RobotElevator extends SubsystemBase {
           }
       );
     }
+
+    public Command setControllerMode(String mode){
+      return this.run(() -> {SmartDashboard.putString("Controller Mode", mode);});
+    }
   
     public void setSpeed(double speed) {
       elevatorWheel.set(speed);

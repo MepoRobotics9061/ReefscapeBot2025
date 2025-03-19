@@ -64,6 +64,7 @@ public class RobotContainer {
   private final Autos m_autos;
   private final SendableChooser<Command> m_autoChooser;
 
+  String controllerMode;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -92,7 +93,6 @@ public class RobotContainer {
         () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
         () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
         () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
-    //  () -> robotCentric.get()));
         () -> false));
 
     m_robotCoralPivot.setDefaultCommand(
@@ -151,78 +151,6 @@ public class RobotContainer {
           11 = Processor A Tag
         */
 
-    operator.button(1).and(operator.button(9).negate()).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-700)
-      // m_gameCommands.manualCoralPivotMove(-700)
-      //m_robotCoralPivot.testingSpeed(-.1)
-    );
-
-    operator.button(3).and(operator.button(9).negate()).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-500)
-      // m_gameCommands.manualCoralPivotMove(-700)
-      // m_robotCoralPivot.testingSpeed(.1)
-    );
-
-    operator.button(4).and(operator.button(9).negate()).onTrue(
-      m_gameCommands.coralPivotPositionSetCommand(-100)
-      // m_gameCommands.manualCoralPivotMove(-100)
-    );
-
-    operator.button(1).and(operator.button(9)).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-1)
-      //m_robotAlgaePivot.testingSpeed(-.1)
-    );
-
-    operator.button(3).and(operator.button(9)).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-3)
-    );
-
-    operator.button(4).and(operator.button(9)).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-4)
-      //m_robotAlgaePivot.testingSpeed(.1)
-
-    );
-
-    operator.button(2).and(operator.button(9)).onTrue(
-      m_gameCommands.algaePivotPositionSetCommand(-5)
-    );
-
-    operator.povDown().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.elevatorMoveCommand(-5)
-    );
-
-    operator.povLeft().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.elevatorMoveCommand(-35)
-    );
-
-    operator.povUp().and(operator.button(10).negate()).onTrue(
-      m_gameCommands.elevatorMoveCommand(-95)
-    );
-
-    operator.povDown().and(operator.button(10)).onTrue(
-      m_gameCommands.elevatorMoveCommand(-50)
-    );
-
-    operator.povUp().and(operator.button(10)).onTrue(
-      m_gameCommands.elevatorMoveCommand(-70)
-    );
-
-    operator.leftTrigger().whileTrue(
-      m_gameCommands.runAlgaeIntakeCommand(1)
-    );
-
-    operator.leftBumper().whileTrue(
-      m_gameCommands.runAlgaeLaunchCommand(1)
-    );
-
-    operator.rightTrigger().whileTrue(
-      m_gameCommands.runCoralIntakeCommand(1)
-    );
-
-    operator.rightBumper().whileTrue(
-      m_gameCommands.runCoralLaunchCommand(1)
-    );
-
     driver.button(7).whileTrue(
       m_gameCommands.centerATagCommand()
     );
@@ -239,6 +167,97 @@ public class RobotContainer {
       m_gameCommands.lightSetCommand("red", "left")
     );
 
+    operator.button(9).onTrue(
+      m_gameCommands.setControllerModeCommand("Coral")
+    );
+
+    operator.button(10).onTrue(
+      m_gameCommands.setControllerModeCommand("Coral")
+    );
+
+    if(controllerMode == "Coral"){
+
+      operator.button(1).onTrue(
+        m_gameCommands.coralPivotPositionSetCommand(-700)
+        // m_gameCommands.manualCoralPivotMove(-700)
+        //m_robotCoralPivot.testingSpeed(-.1)
+      );
+
+      operator.button(3).onTrue(
+        m_gameCommands.coralPivotPositionSetCommand(-500)
+        // m_gameCommands.manualCoralPivotMove(-700)
+        // m_robotCoralPivot.testingSpeed(.1)
+      );
+
+      operator.button(4).onTrue(
+        m_gameCommands.coralPivotPositionSetCommand(-100)
+        // m_gameCommands.manualCoralPivotMove(-100)
+      );
+
+      operator.button(1).onTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-1)
+        //m_robotAlgaePivot.testingSpeed(-.1)
+      );
+
+      operator.povDown().and(operator.button(10).negate()).onTrue(
+        m_gameCommands.elevatorMoveCommand(-5)
+      );
+
+      operator.povLeft().and(operator.button(10).negate()).onTrue(
+        m_gameCommands.elevatorMoveCommand(-35)
+      );
+
+      operator.povUp().and(operator.button(10).negate()).onTrue(
+        m_gameCommands.elevatorMoveCommand(-95)
+      );
+
+      operator.leftTrigger().whileTrue(
+        m_gameCommands.runCoralIntakeCommand(1)
+      );
+
+      operator.rightTrigger().whileTrue(
+        m_gameCommands.runCoralLaunchCommand(1)
+    );
+    } else {
+
+      operator.button(1).onTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-1)
+        //m_robotAlgaePivot.testingSpeed(-.1)
+      );
+
+      operator.button(3).onTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-3)
+      );
+
+      operator.button(4).onTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-4)
+        //m_robotAlgaePivot.testingSpeed(.1)
+      );
+
+      operator.button(2).onTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-5)
+      );
+
+      operator.povDown().onTrue(
+        m_gameCommands.elevatorMoveCommand(-5)
+      );
+
+      operator.povLeft().onTrue(
+        m_gameCommands.elevatorMoveCommand(-50)
+      );
+
+      operator.povUp().onTrue(
+        m_gameCommands.elevatorMoveCommand(-70)
+      );
+
+      operator.leftTrigger().whileTrue(
+        m_gameCommands.runAlgaeIntakeCommand(1)
+      );
+
+      operator.rightTrigger().whileTrue(
+        m_gameCommands.runAlgaeLaunchCommand(1)
+      );
+    }
   }
 
   private void configureAutos() {

@@ -14,7 +14,7 @@ import frc.robot.subsystems.RobotCamera;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.LimeLightCoralPrepCommand;
 import frc.robot.commands.RotateUntil180Command;
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GameCommands {
 
@@ -148,5 +148,9 @@ public class GameCommands {
 
   public Command lightSetCommand(String color, String side){
     return m_robotLights.lightArea(color, side);
+  }
+
+  public Command setControllerModeCommand(String mode){
+    return m_robotElevator.setControllerMode(mode);
   }
 }
