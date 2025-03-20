@@ -22,7 +22,6 @@ public class RobotElevator extends SubsystemBase {
     final int pivotWheelDeviceID = 9;
     elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     elevatorEncoder = elevatorWheel.getEncoder();
-    // angleEncoder = new DutyCycleEncoder(9);
     }
 
     public Command manualElevatorMove(double manualAngle) {
@@ -45,12 +44,12 @@ public class RobotElevator extends SubsystemBase {
   
     public void voidElevatorMove(double manualAngle) {
       SmartDashboard.putNumber("Elevator Point", manualAngle);
-      if (elevatorEncoderValue > (manualAngle + 4)) {
+      if (elevatorEncoderValue > (manualAngle + 2)) {
         setSpeed(-.4);
-      } else if (elevatorEncoderValue < (manualAngle - 1)) {
+      } else if (elevatorEncoderValue < (manualAngle - .5)) {
         setSpeed(.1);
       } else {
-        setSpeed((manualAngle - elevatorEncoderValue) * .1);
+        setSpeed((manualAngle - elevatorEncoderValue) * .2);
       }
     }
 

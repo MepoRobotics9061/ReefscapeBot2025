@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class RobotAlgaePivot extends SubsystemBase {
 
   SparkMax pivotWheel;
+
+  private SparkMaxConfig configWheel;
 
   private RelativeEncoder pivotEncoder;
 
@@ -24,6 +28,9 @@ public class RobotAlgaePivot extends SubsystemBase {
   public RobotAlgaePivot() {
     final int pivotWheelDeviceID = 13;
     pivotWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
+    configWheel = new SparkMaxConfig();
+    configWheel.smartCurrentLimit(10);
+    pivotWheel.configure(configWheel, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     pivotEncoder = pivotWheel.getEncoder();
     }
 
@@ -66,7 +73,7 @@ public class RobotAlgaePivot extends SubsystemBase {
       } else if (pivotEncoderValue < (manualAngle - 2)) {
         setSpeed(.2);
       } else {
-        setSpeed((manualAngle - pivotEncoderValue) * .1);
+        setSpeed((manualAngle - pivotEncoderValue) * .5);
       }
     }
     

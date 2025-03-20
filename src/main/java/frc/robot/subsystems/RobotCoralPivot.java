@@ -4,13 +4,16 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.security.cert.X509CRL;
 public class RobotCoralPivot extends SubsystemBase {
 
   SparkMax pivotWheel;
+
+   
 
   private RelativeEncoder pivotEncoder;
 
@@ -29,13 +32,14 @@ public class RobotCoralPivot extends SubsystemBase {
     public Command manualPivotMove(double manualAngle) {
       return this.runEnd(
           () -> {
+          
             SmartDashboard.putNumber("Coral Pivot Point", manualAngle);
-            if (pivotEncoderValue > (manualAngle + 2)) {
+            if (pivotEncoderValue > (manualAngle + 15)) {
               setSpeed(-.2);
-            } else if (pivotEncoderValue < (manualAngle - 2)) {
+            } else if (pivotEncoderValue < (manualAngle - 15)) {
               setSpeed(.2);
             } else {
-              setSpeed((manualAngle - pivotEncoderValue) * .1);
+              setSpeed((manualAngle - pivotEncoderValue) * .005);
             }
           },
           () -> {
@@ -45,8 +49,9 @@ public class RobotCoralPivot extends SubsystemBase {
     }
 
     public Command pivotPositionSet(double coralPivotPoint) {
-      return this.run(
+      return this.runEnd(
         () -> {
+         
           algaeCurrentPosition = SmartDashboard.getNumber("Algae Pivot Encoder", 0);
           coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
           if(algaeCurrentPosition < -4) {
@@ -58,18 +63,22 @@ public class RobotCoralPivot extends SubsystemBase {
           } else if(coralPivotPoint > -600 && coralCurrentPosition > -600) {
             SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
           }
+        },
+        () -> {
+          stop();
         }
       );
     }
   
     public void voidPivotMove(double manualAngle) {
       SmartDashboard.putNumber("Coral Pivot Point", manualAngle);
-      if (pivotEncoderValue > (manualAngle + 5)) {
-        setSpeed(.2);
-      } else if (pivotEncoderValue < (manualAngle - 5)) {
+      
+      if (pivotEncoderValue > (manualAngle + 15)) {
         setSpeed(-.2);
+      } else if (pivotEncoderValue < (manualAngle - 15)) {
+        setSpeed(.2);
       } else {
-        setSpeed((manualAngle - pivotEncoderValue) * .1);
+        setSpeed((manualAngle - pivotEncoderValue) * .005);
       }
     }
 
