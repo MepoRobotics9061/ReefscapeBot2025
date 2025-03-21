@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.Autos;
@@ -168,29 +169,28 @@ public class RobotContainer {
       m_gameCommands.lightSetCommand("red", "left")
     );
 
-    // operator.button(9).onTrue(
-    //   m_gameCommands.setControllerModeCommand("Coral")
-    // );
+    operator.button(9).onTrue(
+      //m_gameCommands.setControllerModeCommand("Coral")
+      new InstantCommand(() -> setMode("Coral")).andThen(m_gameCommands.coralPivotPositionSetCommand(-100)).andThen(m_gameCommands.algaePivotPositionSetCommand(-1))
+      );
 
-    // operator.button(10).onTrue(
-    //   m_gameCommands.setControllerModeCommand("Algae")
-    // );
+    operator.button(10).onTrue(
+      //m_gameCommands.setControllerModeCommand("Algae")
+      new InstantCommand(() -> setMode("Algae")).andThen(m_gameCommands.coralPivotPositionSetCommand(-100)).andThen(m_gameCommands.algaePivotPositionSetCommand(-1)));
 
-    //if(controllerMode == "Coral"){
-if (true) {
-      operator.button(1).whileTrue(
+      operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
         m_gameCommands.coralPivotPositionSetCommand(-800)
         //m_gameCommands.manualCoralPivotMove(-700)
         //m_robotCoralPivot.testingSpeed(-.1)
       );
 
-      operator.button(3).whileTrue(
+      operator.button(3).and(() -> controllerMode == "Coral").whileTrue(
         m_gameCommands.coralPivotPositionSetCommand(-500)
          //m_gameCommands.manualCoralPivotMove(-500)
         // m_robotCoralPivot.testingSpeed(.1)
       );
 
-      operator.button(4).whileTrue(
+      operator.button(4).and(() -> controllerMode == "Coral").whileTrue(
         m_gameCommands.coralPivotPositionSetCommand(-100)
          //m_gameCommands.manualCoralPivotMove(-100)
       );
@@ -200,66 +200,64 @@ if (true) {
       //   //m_robotAlgaePivot.testingSpeed(-.1)
       // );
 
-      operator.povDown().and(operator.button(10).negate()).onTrue(
+      operator.povDown().and(() -> controllerMode == "Coral").onTrue(
         m_gameCommands.elevatorMoveCommand(-5)
       );
 
-      operator.povLeft().and(operator.button(10).negate()).onTrue(
+      operator.povLeft().and(() -> controllerMode == "Coral").onTrue(
         m_gameCommands.elevatorMoveCommand(-40)
       );
 
-      operator.povUp().and(operator.button(10).negate()).onTrue(
+      operator.povUp().and(() -> controllerMode == "Coral").onTrue(
         m_gameCommands.elevatorMoveCommand(-100)
       );
 
-      operator.leftTrigger().whileTrue(
+      operator.leftTrigger().and(() -> controllerMode == "Coral").whileTrue(
         m_gameCommands.runCoralIntakeCommand(.5)
       );
 
-      operator.rightTrigger().whileTrue(
+      operator.rightTrigger().and(() -> controllerMode == "Coral").whileTrue(
         m_gameCommands.runCoralLaunchCommand(.5)
     );
-    } else {
 
-      operator.button(1).whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-1)
+      operator.button(1).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-5)
         //m_robotAlgaePivot.testingSpeed(-.1)
       );
 
-      operator.button(3).whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-3)
+      operator.button(3).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-15)
       );
 
-      operator.button(4).whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-4)
+      operator.button(4).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-25)
         //m_robotAlgaePivot.testingSpeed(.1)
       );
 
-      operator.button(2).whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-5)
+      operator.button(2).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(-25)
       );
 
-      operator.povDown().onTrue(
+      operator.povDown().and(() -> controllerMode == "Algae").onTrue(
         m_gameCommands.elevatorMoveCommand(-5)
       );
 
-      operator.povLeft().onTrue(
+      operator.povLeft().and(() -> controllerMode == "Algae").onTrue(
         m_gameCommands.elevatorMoveCommand(-50)
       );
 
-      operator.povUp().onTrue(
+      operator.povUp().and(() -> controllerMode == "Algae").onTrue(
         m_gameCommands.elevatorMoveCommand(-70)
       );
 
-      operator.leftTrigger().whileTrue(
+      operator.leftTrigger().and(() -> controllerMode == "Algae").whileTrue(
         m_gameCommands.runAlgaeIntakeCommand(1)
       );
 
-      operator.rightTrigger().whileTrue(
+      operator.rightTrigger().and(() -> controllerMode == "Algae").whileTrue(
         m_gameCommands.runAlgaeLaunchCommand(1)
       );
     }
-  }
 
   private void configureAutos() {
     m_autoChooser.addOption("1", m_autos.autoCommand1());
@@ -277,6 +275,11 @@ if (true) {
    */
   public Command getAutonomousCommand() {
     return m_autoChooser.getSelected();
+  }
+
+  public void setMode(String mode){
+    controllerMode = mode;
+    SmartDashboard.putString("Controller Mode", mode);
   }
 
 }

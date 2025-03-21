@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
@@ -147,9 +148,5 @@ public class GameCommands {
 
   public Command lightSetCommand(String color, String side) {
     return m_robotLights.lightArea(color, side);
-  }
-
-  public Command setControllerModeCommand(String mode) {
-    return m_robotElevator.setControllerMode(mode);
   }
 }
