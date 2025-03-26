@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -17,6 +18,7 @@ import frc.robot.autos.Autos;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.GameCommands;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TeleopSwerveLimit;
 import frc.robot.subsystems.RobotAlgae;
 import frc.robot.subsystems.RobotCamera;
 import frc.robot.subsystems.RobotCoral;
@@ -24,9 +26,9 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotElevator;
-import frc.robot.subsystems.RobotHang;
 import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,8 +55,6 @@ public class RobotContainer {
 
   private final RobotCamera m_robotCamera = new RobotCamera();
 
-  private final RobotHang m_robotHang = new RobotHang();
-
   private final RobotLights m_robotLights = new RobotLights();
 
   private final Swerve s_Swerve = new Swerve(m_robotCamera); 
@@ -65,7 +65,9 @@ public class RobotContainer {
   private final Autos m_autos;
   private final SendableChooser<Command> m_autoChooser;
 
-  String controllerMode;
+  String controllerMode = SmartDashboard.getString("Controller Mode", "Coral");
+
+  Boolean isAuto = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -77,7 +79,6 @@ public class RobotContainer {
       m_robotCoral,
       m_robotCoralPivot,
       m_robotElevator,
-      m_robotHang,
       m_robotLights,
       s_Swerve
     );
@@ -88,13 +89,26 @@ public class RobotContainer {
 
     m_autoChooser = new SendableChooser<Command>();
 
+    // s_Swerve.setDefaultCommand(
+    
+    //   new TeleopSwerve(
+    //     s_Swerve,
+    //     () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
+    //     () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
+    //     () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
+    //     () -> true));
+
     s_Swerve.setDefaultCommand(
-      new TeleopSwerve(
-        s_Swerve,
-        () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
-        () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
-        () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
-        () -> false));
+    
+    new TeleopSwerveLimit(
+      s_Swerve,
+      () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
+      () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
+      () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
+      () -> -driver.getRawAxis(3) ,
+      () -> true));
+
+
 
     m_robotCoralPivot.setDefaultCommand(
       new RunCommand(
@@ -106,14 +120,14 @@ public class RobotContainer {
 
     m_robotAlgaePivot.setDefaultCommand(
       new RunCommand(
-        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", -1)), 
+        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", -3)), 
         m_robotAlgaePivot
       )
     );
 
     m_robotElevator.setDefaultCommand(
       new RunCommand(
-        () -> m_robotElevator.voidElevatorMove(SmartDashboard.getNumber("Elevator Point", 0)), 
+        () -> m_robotElevator.voidElevatorMove(SmartDashboard.getNumber("Elevator Point", -4)), 
         m_robotElevator
       )
     );
@@ -134,9 +148,9 @@ public class RobotContainer {
 
     //zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    // driver.button(3).onTrue(
-    //   s_Swerve.zeroGyro()
-    // );
+    driver.button(3).onTrue(
+      new InstantCommand(() -> s_Swerve.zeroGyro())
+    );
 
     /*  XBox:
           5, 6 [Bumpers] = Intake
@@ -157,8 +171,12 @@ public class RobotContainer {
       m_gameCommands.centerATagCommand()
     );
 
-    driver.button(9).whileTrue(
+    driver.button(9).and(() -> controllerMode == "Coral").whileTrue(
       m_gameCommands.coralPrepCommand()
+    );
+
+    driver.button(9).and(() -> controllerMode == "Algae").whileTrue(
+      m_gameCommands.algaePrepCommand()
     );
 
     operator.button(7).whileTrue(
@@ -170,46 +188,61 @@ public class RobotContainer {
     );
 
     operator.button(9).onTrue(
-      //m_gameCommands.setControllerModeCommand("Coral")
-      new InstantCommand(() -> setMode("Coral")).andThen(m_gameCommands.coralPivotPositionSetCommand(-100)).andThen(m_gameCommands.algaePivotPositionSetCommand(-1))
-      );
+      Commands
+      .sequence(
+        new InstantCommand(() -> setMode("Coral")),
+        m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
+        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition)
+      )
+    );
 
     operator.button(10).onTrue(
-      //m_gameCommands.setControllerModeCommand("Algae")
-      new InstantCommand(() -> setMode("Algae")).andThen(m_gameCommands.coralPivotPositionSetCommand(-100)).andThen(m_gameCommands.algaePivotPositionSetCommand(-1)));
+      Commands
+      .sequence(
+        new InstantCommand(() -> setMode("Algae")),
+        m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
+        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition)
+      )
+    );
 
       operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-800)
+        m_gameCommands.coralPivotPositionSetCommand(-825)
         //m_gameCommands.manualCoralPivotMove(-700)
         //m_robotCoralPivot.testingSpeed(-.1)
       );
 
       operator.button(3).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-500)
+        m_gameCommands.coralPivotPositionSetCommand(-675)
          //m_gameCommands.manualCoralPivotMove(-500)
         // m_robotCoralPivot.testingSpeed(.1)
       );
 
       operator.button(4).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-100)
+        m_gameCommands.coralPivotPositionSetCommand(-400)
+         //m_gameCommands.manualCoralPivotMove(-500)
+        // m_robotCoralPivot.testingSpeed(.1)
+      );
+
+      operator.button(2).and(() -> controllerMode == "Coral").whileTrue(
+        m_gameCommands.coralPivotPositionSetCommand(-50)
          //m_gameCommands.manualCoralPivotMove(-100)
       );
 
       // operator.button(1).onTrue(
       //   m_gameCommands.algaePivotPositionSetCommand(-1)
-      //   //m_robotAlgaePivot.testingSpeed(-.1)
-      // );
+         //m_robotAlgaePivot.testingSpeed(-.1)
+      //);
 
       operator.povDown().and(() -> controllerMode == "Coral").onTrue(
         m_gameCommands.elevatorMoveCommand(-5)
       );
 
       operator.povLeft().and(() -> controllerMode == "Coral").onTrue(
-        m_gameCommands.elevatorMoveCommand(-40)
+        m_gameCommands.elevatorMoveCommand(-35)
       );
 
       operator.povUp().and(() -> controllerMode == "Coral").onTrue(
-        m_gameCommands.elevatorMoveCommand(-100)
+        m_gameCommands.elevatorMoveCommand(-95)
       );
 
       operator.leftTrigger().and(() -> controllerMode == "Coral").whileTrue(
@@ -218,36 +251,42 @@ public class RobotContainer {
 
       operator.rightTrigger().and(() -> controllerMode == "Coral").whileTrue(
         m_gameCommands.runCoralLaunchCommand(.5)
-    );
+      );
+
+      operator.leftBumper().onTrue(
+      //  //m_robotElevator.bumpPosition(false)
+        new InstantCommand(() -> elevatorOffsetUp())
+      );
+
+      operator.rightBumper().onTrue(
+     //   //m_robotElevator.bumpPosition(true)
+        new InstantCommand(() -> elevatorOffsetDown())
+      );
 
       operator.button(1).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-5)
+        m_gameCommands.algaePivotPositionSetCommand(-22)
         //m_robotAlgaePivot.testingSpeed(-.1)
       );
 
       operator.button(3).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-15)
+        m_gameCommands.algaePivotPositionSetCommand(-9)
       );
 
       operator.button(4).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-25)
+        m_gameCommands.algaePivotPositionSetCommand(-1)
         //m_robotAlgaePivot.testingSpeed(.1)
       );
 
-      operator.button(2).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-25)
-      );
-
       operator.povDown().and(() -> controllerMode == "Algae").onTrue(
-        m_gameCommands.elevatorMoveCommand(-5)
+        m_gameCommands.elevatorMoveCommand(-6)
       );
 
       operator.povLeft().and(() -> controllerMode == "Algae").onTrue(
-        m_gameCommands.elevatorMoveCommand(-50)
+        m_gameCommands.elevatorMoveCommand(-45)
       );
 
       operator.povUp().and(() -> controllerMode == "Algae").onTrue(
-        m_gameCommands.elevatorMoveCommand(-70)
+        m_gameCommands.elevatorMoveCommand(-75)
       );
 
       operator.leftTrigger().and(() -> controllerMode == "Algae").whileTrue(
@@ -263,6 +302,8 @@ public class RobotContainer {
     m_autoChooser.addOption("1", m_autos.autoCommand1());
     m_autoChooser.addOption("2", m_autos.autoCommand2());
     m_autoChooser.addOption("3", m_autos.autoCommand3());
+    m_autoChooser.addOption("TEST", m_autos.autoCommandTEST());
+
     m_autoChooser.setDefaultOption("2", m_autos.autoCommand2());
 
     SmartDashboard.putData("AutoCommand", m_autoChooser);
@@ -280,6 +321,13 @@ public class RobotContainer {
   public void setMode(String mode){
     controllerMode = mode;
     SmartDashboard.putString("Controller Mode", mode);
+  }
+  
+  public void elevatorOffsetUp(){
+    m_robotElevator.offsetUp();
+  }
+  public void elevatorOffsetDown(){
+    m_robotElevator.offsetDown();
   }
 
 }

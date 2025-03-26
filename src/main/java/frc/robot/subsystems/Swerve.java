@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.RobotCamera;
+import java.util.function.Function;
 
 public class Swerve extends SubsystemBase {
   // private final Pigeon2 gyro;
@@ -37,6 +38,7 @@ public class Swerve extends SubsystemBase {
   private Field2d field;
 
   private double gyroValue;
+  private double tagDistance;
 
   private double gyroATagSpinAmount;
 
@@ -69,7 +71,7 @@ public class Swerve extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), translation.getY(), rotation, getYaw())
+                translation.getX(), translation.getY(), rotation, getYawField())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
@@ -84,13 +86,51 @@ public class Swerve extends SubsystemBase {
 
   public void coralPrepVoid() {
     if (m_robotCamera.tagArea != 0) {
-      drive(new Translation2d(-(15 - m_robotCamera.tagArea) / 30, m_robotCamera.tagX / 20), /* gyroATagSpinAmount */ 0,
-          false, true);
+    //  drive(new Translation2d(-(10 - m_robotCamera.tagArea) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2 ,
+      drive(new Translation2d(-(15.5 - tagDistance) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2 ,
+      false, true);
     }
   }
 
-  public void rotateUntilVoid(double rotateAmount) {
-    drive(new Translation2d(0, 0), gyroValue - rotateAmount, false, true);
+  public void algaePrepVoid() {
+    if (m_robotCamera.tagArea != 0) {
+     // drive(new Translation2d(-(14 - m_robotCamera.tagArea) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2,
+      drive(new Translation2d(-(13.5 - tagDistance) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2, 
+      false, true);
+    }
+  }
+
+  public void rotateUntilVoid(double desiredAngle) {
+
+    double rotateErrorAmount = gyroValue - desiredAngle;
+
+    if(rotateErrorAmount > 180) {
+      rotateErrorAmount -= 360;
+    }
+
+    if(rotateErrorAmount < -180) {
+      rotateErrorAmount += 360;
+    }
+
+    rotateErrorAmount = rotateErrorAmount / 15;
+
+    if ((.05 < rotateErrorAmount) && (rotateErrorAmount < .2)) {
+      rotateErrorAmount = .2;
+    }
+
+    else if ((-.2 < rotateErrorAmount) && (rotateErrorAmount < -0.05)) {
+      rotateErrorAmount = -.2;
+    }
+
+    if (rotateErrorAmount > 4) {
+      rotateErrorAmount = 4;
+    }
+
+    if (rotateErrorAmount < -4) {
+      rotateErrorAmount = -4;
+    }
+
+    drive(new Translation2d(0, 0), -rotateErrorAmount, false, true);
   }
 
   /* Used by SwerveControllerCommand in Auto */
@@ -131,6 +171,16 @@ public class Swerve extends SubsystemBase {
         : Rotation2d.fromDegrees(gyro.getYaw());
   }
 
+  public Rotation2d getYawField() {
+    return (Constants.Swerve.invertGyro)
+        ? Rotation2d.fromDegrees(360 - gyro.getYaw()+180)
+        : Rotation2d.fromDegrees(gyro.getYaw()+180);
+  }
+
+  // public double rotateUntilAmount(double desiredAngle) {
+  //   return 180 - desiredAngle;
+  // }
+
   @Override
   public void periodic() {
     // swerveOdometry.update(getYaw(), getStates());
@@ -145,12 +195,18 @@ public class Swerve extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
     }
 
-    gyroValue = gyro.getYaw() + 180;
+    //gyroValue = gyro.getYaw() + 180;
+    gyroValue = gyro.getYaw() ;
+
 
     SmartDashboard.putNumber(
         "Gyro", gyroValue);
 
     double errorAmount = m_robotCamera.spinAmount - gyroValue;
+
+    tagDistance = 14/Math.tan((23 + m_robotCamera.tagY)/57.29577)/3;
+
+    SmartDashboard.putNumber("Tag Distance", tagDistance);
 
     if (errorAmount > 180) {
       errorAmount -= 360;

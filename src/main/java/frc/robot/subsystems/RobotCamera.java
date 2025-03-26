@@ -12,6 +12,7 @@ public class RobotCamera extends SubsystemBase {
   double tagY;
   double tagArea;
   double tagID;
+  
   double spinAmount;
   double gyro;
   String teamCol;
@@ -20,6 +21,7 @@ public class RobotCamera extends SubsystemBase {
   NetworkTableEntry ty;
   NetworkTableEntry ta;
   NetworkTableEntry tid;
+  
 
   double tagIDSave = -1;
 
@@ -42,11 +44,13 @@ public class RobotCamera extends SubsystemBase {
     ty = table.getEntry("ty");
     ta = table.getEntry("ta");
     tid = table.getEntry("tid");
+   
 
     tagX = tx.getDouble(0.0);
     tagY = ty.getDouble(0.0);
     tagArea = ta.getDouble(0.0);
     tagID = tid.getDouble(0.0);
+    
 
     if (tagID != -1){
       tagIDSave = tagID;
@@ -57,6 +61,7 @@ public class RobotCamera extends SubsystemBase {
     SmartDashboard.putNumber("Tag Y", tagY);
     SmartDashboard.putNumber("Tag Area", tagArea);
     SmartDashboard.putNumber("Tag ID", tagID);
+   
 
     teamCol = SmartDashboard.getString("Team Color", "r");
 

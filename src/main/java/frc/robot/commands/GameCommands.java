@@ -4,20 +4,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
+import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.RobotAlgae;
 import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotCoral;
 import frc.robot.subsystems.RobotCoralPivot;
 import frc.robot.subsystems.RobotElevator;
-import frc.robot.subsystems.RobotHang;
 import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.LimeLightCoralPrepCommand;
-import frc.robot.commands.RotateUntil180Command;
+import frc.robot.commands.LimeLightAlgaePrepCommand;
+import frc.robot.commands.RotateUntilCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class GameCommands {
+public class GameCommands /* extends SubsystemBase */{
 
   private final RobotAlgae m_robotAlgae;
 
@@ -30,8 +31,6 @@ public class GameCommands {
   private final RobotCoralPivot m_robotCoralPivot;
 
   private final RobotElevator m_robotElevator;
-
-  private final RobotHang m_robotHang;
 
   private final RobotLights m_robotLights;
 
@@ -54,7 +53,6 @@ public class GameCommands {
       RobotCoral robotCoral,
       RobotCoralPivot robotCoralPivot,
       RobotElevator robotElevator,
-      RobotHang robotHang,
       RobotLights robotLights,
       Swerve swerve) {
     m_robotAlgae = robotAlgae;
@@ -69,8 +67,6 @@ public class GameCommands {
 
     m_robotElevator = robotElevator;
 
-    m_robotHang = robotHang;
-
     m_robotLights = robotLights;
 
     s_Swerve = swerve;
@@ -78,30 +74,42 @@ public class GameCommands {
   }
 
   public Command runCoralIntakeCommand(double speed) {
+    System.out.println("runCoralIntakeCommand: RUNNING");
     return m_robotCoral.intake(speed);
   }
 
   public Command runCoralLaunchCommand(double speed) {
+    System.out.println("runCoralLaunchCommand: RUNNING");
     return m_robotCoral.launch(speed);
   }
 
   public Command runAlgaeIntakeCommand(double speed) {
+    System.out.println("runAlgaeIntakeCommand: RUNNING");
     return m_robotAlgae.intake(speed);
   }
 
   public Command runAlgaeLaunchCommand(double speed) {
+    System.out.println("runAlgaeLaunchCommand: RUNNING");
     return m_robotAlgae.launch(speed);
   }
 
   public Command manualCoralPivotMove(double desiredValue) {
+    System.out.println("manualCoralPivotMove: RUNNING");
     return m_robotCoralPivot.manualPivotMove(desiredValue);
   }
 
+  public Command manualAlgaePivotMove(double desiredValue) {
+    System.out.println("manualAlgaePivotMove: RUNNING");
+    return m_robotAlgaePivot.manualPivotMove(desiredValue);
+  }
+
   public Command coralPivotPositionSetCommand(double pivotPoint) {
+    System.out.println("coralPivotPositionSetCommand: RUNNING");
     return m_robotCoralPivot.pivotPositionSet(pivotPoint);
   }
 
   public Command algaePivotPositionSetCommand(double pivotPoint) {
+    System.out.println("algaePivotPositionSetCommand: RUNNING");
     return m_robotAlgaePivot.pivotPositionSet(pivotPoint);
   }
 
@@ -114,28 +122,36 @@ public class GameCommands {
   // }
 
   public Command elevatorMoveCommand(double desiredValue) {
+    System.out.println("elevatorMoveCommand: RUNNING");
     return m_robotElevator.manualElevatorMove(desiredValue);
   }
 
-  public Command hangCloseCommand() {
-    return m_robotHang.hangClose();
+  public Command elevatorMoveCommandSet(double desiredValue) {
+    System.out.println("elevatorMoveCommandSet: RUNNING");
+    return m_robotElevator.manualElevatorMoveSet(desiredValue);
   }
 
-  public Command hangOpenCommand() {
-    return m_robotHang.hangOpen();
-  }
-
-  public Command driveCommand(double vertical, double horizontal, double rotate) {
+  public Command driveCommand(DoubleSupplier vertical, DoubleSupplier horizontal, DoubleSupplier rotate) {
+    System.out.println("driveCommand: RUNNING");
     return new TeleopSwerve(
         s_Swerve,
-        () -> vertical,
-        () -> horizontal,
-        () -> rotate,
-        () -> true);
+        () -> vertical.getAsDouble(),
+        () -> horizontal.getAsDouble(),
+        () -> rotate.getAsDouble(),
+        () -> false);
   }
 
-  public Command driveRotateUntil180Command(double rotateAmount) {
-    return new RotateUntil180Command(s_Swerve);
+  // public Command autoDriveCommand(double vertical, double horizontal, double rotate) {
+  //   return this.runEnd(
+  //     () -> {
+  //     driveCommand(vertical, horizontal, rotate);
+  //   }, () -> {
+  //     driveCommand(0, 0, 0);
+  //   });
+  // }
+
+  public Command driveRotateUntilCommand(double angle) {
+    return new RotateUntilCommand(s_Swerve, () -> angle);
   }
 
   public Command centerATagCommand() {
@@ -144,6 +160,10 @@ public class GameCommands {
 
   public Command coralPrepCommand() {
     return new LimeLightCoralPrepCommand(s_Swerve);
+  }
+
+  public Command algaePrepCommand() {
+    return new LimeLightAlgaePrepCommand(s_Swerve);
   }
 
   public Command lightSetCommand(String color, String side) {

@@ -28,7 +28,7 @@ public class RobotCoral extends SubsystemBase {
   public Command launch(double speed) {
     return this.runEnd(
         () -> {
-            setWheelSpeed(-speed);
+            setWheelSpeed(speed);
         },
         () -> {
           stop();
@@ -40,7 +40,7 @@ public class RobotCoral extends SubsystemBase {
     return this.runEnd(
         () -> {
           // if(limitSwitch.get() == false) {
-            setWheelSpeed(speed);
+            setWheelSpeed(-speed);
           // } else {
           //   stop();
           // }

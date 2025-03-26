@@ -26,23 +26,23 @@ public RobotLights() {
                 if(color == "blue"){
 
                     if(side == "left"){
-                        m_led.setLEDs(0, 0, 255, 50, 9, 5);
-                        m_led.setLEDs(255, 0, 0, 50, 14, 5);
+                        m_led.setLEDs(0, 0, 255, 10, 9, 150);
+                        m_led.setLEDs(255, 0, 0, 10, 159, 150);
 
                     } else {
-                        m_led.setLEDs(0, 0, 255, 50, 14, 5);
-                        m_led.setLEDs(255, 0, 0, 50, 9, 5);
+                        m_led.setLEDs(255, 0, 0, 10, 9, 150);
+                        m_led.setLEDs(0, 0, 255, 10, 159, 150);
                     }
 
                 } else {
 
                     if(side == "left"){
-                        m_led.setLEDs(255, 0, 0, 50, 9, 5);
-                        m_led.setLEDs(0, 0, 255, 50, 14, 5);
+                        m_led.setLEDs(255, 0, 0, 10, 9, 150);
+                        m_led.setLEDs(0, 0, 255, 10, 159, 150);
 
                     } else {
-                        m_led.setLEDs(255, 0, 0, 50, 14, 5);
-                        m_led.setLEDs(0, 0, 255, 50, 9, 5);
+                        m_led.setLEDs(255, 0, 0, 10, 9, 150);
+                        m_led.setLEDs(0, 0, 255, 10, 159, 150);
                     }
 
                 }

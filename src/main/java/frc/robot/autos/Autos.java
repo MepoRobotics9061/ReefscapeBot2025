@@ -4,66 +4,51 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.GameCommands;
+import frc.robot.Constants;
 
 public class Autos {
 
-  private final GameCommands m_gameCommands;
-
-  double gyroAngle;
-  double elevatorPoint;
-  double coralPivotPoint;
-  double algaePivotPoint;
-  double tagArea;
-  double timeForward;
-  double timeSpinning;
-  double timeCentering;
-  double timeEleMoving;
-  double timePivoting;
-  double timeLaunching;
-  double timeIntaking;
-  double speedLaunching;
-  double speedIntaking;
-  double speedDriving;
-  double positionEleTop;
-  double positionEleBottom;
-  double positionCoralPivot;
-  double positionAlgaePivot;
+  private final GameCommands m_gameCommands; 
 
   public Autos(
     GameCommands gameCommands
   ) {
     m_gameCommands = gameCommands;
+
   }
 
   public Command autoCommand1() {
     return Commands
       .sequence(
-        m_gameCommands.driveCommand(0, 0, gyroAngle - 120).withTimeout(timeSpinning),
-        m_gameCommands.driveCommand(speedDriving, 0, 0).withTimeout(timeForward),
-        m_gameCommands.coralPrepCommand().withTimeout(timeCentering),
-        m_gameCommands.elevatorMoveCommand(positionEleTop).withTimeout(timeEleMoving),
-        m_gameCommands.coralPivotPositionSetCommand(positionCoralPivot).withTimeout(timePivoting),
-        m_gameCommands.runCoralLaunchCommand(speedLaunching).withTimeout(timeLaunching),
-        m_gameCommands.coralPivotPositionSetCommand(0).withTimeout(timePivoting),
-        m_gameCommands.elevatorMoveCommand(positionEleBottom).withTimeout(timeEleMoving),
-        m_gameCommands.algaePivotPositionSetCommand(positionAlgaePivot).withTimeout(timePivoting),
-        m_gameCommands.runAlgaeIntakeCommand(speedIntaking).withTimeout(timeIntaking)
+        m_gameCommands.driveRotateUntilCommand(120).withTimeout(Constants.AutoConstants.timeSpinning),
+        m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
+        m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
+        m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
+        m_gameCommands.elevatorMoveCommand(Constants.AutoConstants.positionEleTop).withTimeout(Constants.AutoConstants.timeEleMoving).asProxy(),
+        m_gameCommands.coralPivotPositionSetCommand(Constants.AutoConstants.positionCoralPivot).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+        m_gameCommands.runCoralLaunchCommand(Constants.AutoConstants.speedLaunching).withTimeout(Constants.AutoConstants.timeLaunching),
+        m_gameCommands.coralPivotPositionSetCommand(-50).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+        m_gameCommands.elevatorMoveCommand(Constants.AutoConstants.positionEleBottom).withTimeout(Constants.AutoConstants.timeEleMoving).asProxy(),
+        m_gameCommands.algaePivotPositionSetCommand(Constants.AutoConstants.positionAlgaePivot).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+        m_gameCommands.runAlgaeIntakeCommand(Constants.AutoConstants.speedIntaking).withTimeout(Constants.AutoConstants.timeIntaking)
       )
       .withName("autoCommand");
   }
   public Command autoCommand2() {
     return Commands
       .sequence(
-        m_gameCommands.driveCommand(0, 0, gyroAngle - 180).withTimeout(timeSpinning),
-        m_gameCommands.driveCommand(speedDriving, 0, 0).withTimeout(timeForward),
-        m_gameCommands.coralPrepCommand().withTimeout(timeCentering),
-        m_gameCommands.elevatorMoveCommand(positionEleTop).withTimeout(timeEleMoving),
-        m_gameCommands.coralPivotPositionSetCommand(positionCoralPivot).withTimeout(timePivoting),
-        m_gameCommands.runCoralLaunchCommand(speedLaunching).withTimeout(timeLaunching),
-        m_gameCommands.coralPivotPositionSetCommand(0).withTimeout(timePivoting),
-        m_gameCommands.elevatorMoveCommand(positionEleBottom).withTimeout(timeEleMoving),
-        m_gameCommands.algaePivotPositionSetCommand(positionAlgaePivot).withTimeout(timePivoting),
-        m_gameCommands.runAlgaeIntakeCommand(speedIntaking).withTimeout(timeIntaking)
+        m_gameCommands.elevatorMoveCommand(-7).withTimeout(1).asProxy(),
+        m_gameCommands.driveRotateUntilCommand(180).withTimeout(Constants.AutoConstants.timeSpinning),
+        m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
+        m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
+        m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
+        m_gameCommands.elevatorMoveCommand(Constants.AutoConstants.positionEleTop).withTimeout(Constants.AutoConstants.timeEleMoving).asProxy(),
+        m_gameCommands.coralPivotPositionSetCommand(Constants.AutoConstants.positionCoralPivot).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+        m_gameCommands.runCoralLaunchCommand(Constants.AutoConstants.speedLaunching).withTimeout(Constants.AutoConstants.timeLaunching),
+        m_gameCommands.coralPivotPositionSetCommand(-50).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+        m_gameCommands.elevatorMoveCommand(Constants.AutoConstants.positionEleBottom).withTimeout(Constants.AutoConstants.timeEleMoving).asProxy(),
+        m_gameCommands.algaePivotPositionSetCommand(Constants.AutoConstants.positionAlgaePivot).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+        m_gameCommands.runAlgaeIntakeCommand(Constants.AutoConstants.speedIntaking).withTimeout(Constants.AutoConstants.timeIntaking)
       )
       .withName("autoCommand");
   }
@@ -71,38 +56,32 @@ public class Autos {
 public Command autoCommand3() {
   return Commands
     .sequence(
-      m_gameCommands.driveCommand(0, 0, gyroAngle - 240).withTimeout(timeSpinning),
-      m_gameCommands.driveCommand(speedDriving, 0, 0).withTimeout(timeForward),
-      m_gameCommands.coralPrepCommand().withTimeout(timeCentering),
-      m_gameCommands.elevatorMoveCommand(positionEleTop).withTimeout(timeEleMoving),
-      m_gameCommands.coralPivotPositionSetCommand(positionCoralPivot).withTimeout(timePivoting),
-      m_gameCommands.runCoralLaunchCommand(speedLaunching).withTimeout(timeLaunching),
-      m_gameCommands.coralPivotPositionSetCommand(0).withTimeout(timePivoting),
-      m_gameCommands.elevatorMoveCommand(positionEleBottom).withTimeout(timeEleMoving),
-      m_gameCommands.algaePivotPositionSetCommand(positionAlgaePivot).withTimeout(timePivoting),
-      m_gameCommands.runAlgaeIntakeCommand(speedIntaking).withTimeout(timeIntaking)
+      m_gameCommands.driveRotateUntilCommand(240).withTimeout(Constants.AutoConstants.timeSpinning),
+      m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
+      m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
+      m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
+      m_gameCommands.elevatorMoveCommand(Constants.AutoConstants.positionEleTop).withTimeout(Constants.AutoConstants.timeEleMoving).asProxy(),
+      m_gameCommands.coralPivotPositionSetCommand(Constants.AutoConstants.positionCoralPivot).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+      m_gameCommands.runCoralLaunchCommand(Constants.AutoConstants.speedLaunching).withTimeout(Constants.AutoConstants.timeLaunching),
+      m_gameCommands.coralPivotPositionSetCommand(-50).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+      m_gameCommands.elevatorMoveCommand(Constants.AutoConstants.positionEleBottom).withTimeout(Constants.AutoConstants.timeEleMoving).asProxy(),
+      m_gameCommands.algaePivotPositionSetCommand(Constants.AutoConstants.positionAlgaePivot).withTimeout(Constants.AutoConstants.timePivoting).asProxy(),
+      m_gameCommands.runAlgaeIntakeCommand(Constants.AutoConstants.speedIntaking).withTimeout(Constants.AutoConstants.timeIntaking)
     )
     .withName("autoCommand");
 }
 
-public void robotPeriodic(){
-  gyroAngle = SmartDashboard.getNumber("Gyro", 0);
-  elevatorPoint = SmartDashboard.getNumber("Elevator Point", 0);
-  coralPivotPoint = SmartDashboard.getNumber("Coral Pivot Point", 0);
-  algaePivotPoint = SmartDashboard.getNumber("Algae Pivot Point", 0);
-  timeSpinning = SmartDashboard.getNumber("Autonomous Time Spinning", 2);
-  timeForward = SmartDashboard.getNumber("Autonomous Time Forward", 1);
-  timeCentering = SmartDashboard.getNumber("Autonomous Time Centering", 1);
-  timeEleMoving = SmartDashboard.getNumber("Autonomous Time Moving Elevator", 1);
-  timePivoting = SmartDashboard.getNumber("Autonomous Time Pivoting", 1);
-  timeLaunching = SmartDashboard.getNumber("Autonomous Time Launching", 1);
-  timeIntaking = SmartDashboard.getNumber("Autonomous Time Intaking", 1);
-  speedDriving = SmartDashboard.getNumber("Autonomous Speed Driving", .5);
-  speedLaunching = SmartDashboard.getNumber("Autonomous Speed Launching", .5);
-  speedIntaking = SmartDashboard.getNumber("Autonomous Speed Intaking", .5);
-  positionEleTop = SmartDashboard.getNumber("Autonomous Position Elevator Top", -95);
-  positionEleBottom = SmartDashboard.getNumber("Autonomous Position Elevator Bottom", -5);
-  positionCoralPivot = SmartDashboard.getNumber("Autonomous Position Coral Pivot", -700);
-  positionAlgaePivot = SmartDashboard.getNumber("Autonomous Position Algae Pivot", -4);
+public Command autoCommandTEST() {
+  return Commands
+    .sequence(
+      m_gameCommands.driveRotateUntilCommand(240).withTimeout(4),
+      m_gameCommands.driveCommand(() -> -.2, () -> 0, () -> 0).withTimeout(0.5),
+      m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
+      m_gameCommands.elevatorMoveCommand(-10).withTimeout(3).asProxy()
+      
+  
+    )
+    .withName("autoCommand");
 }
+
 }

@@ -15,6 +15,14 @@ public class RobotElevator extends SubsystemBase {
 
   private double elevatorEncoderValue;
 
+  private double gainSpeed = -0.06;
+
+  private double targetPosition = -5;
+
+  private double angleOffset = 0;
+
+  private boolean isAuto = false;
+
   public RobotElevator() {
     final int pivotWheelDeviceID = 9;
     elevatorWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
@@ -24,30 +32,40 @@ public class RobotElevator extends SubsystemBase {
     public Command manualElevatorMove(double manualAngle) {
       return this.runEnd(
           () -> {
-            SmartDashboard.putNumber("Elevator Point", manualAngle);
-            if (elevatorEncoderValue > (manualAngle + 10)) {
-              setSpeed(-.2);
-            } else if (elevatorEncoderValue < (manualAngle - 10)) {
-              setSpeed(.2);
-            } else {
-              setSpeed((manualAngle - elevatorEncoderValue) * .02);
-            }
+            voidElevatorMove(manualAngle);
           },
           () -> {
             stop();
           }
         );
     }
+
+    public Command manualElevatorMoveSet(double manualAngle) {
+      return this.runEnd(
+          () -> {
+            voidElevatorMove(manualAngle);
+          },
+          () -> {
+            doNothing();
+          }
+        );
+    }
   
     public void voidElevatorMove(double manualAngle) {
+      manualAngle = Math.max(Math.min(manualAngle - angleOffset, -4), -95);
+      SmartDashboard.putNumber("Elevator Offset", angleOffset);
+      
+      double targetSpeed = (manualAngle - elevatorEncoderValue) * .2 + gainSpeed;
       SmartDashboard.putNumber("Elevator Point", manualAngle);
-      if (elevatorEncoderValue > (manualAngle + 2)) {
-        setSpeed(-.4);
-      } else if (elevatorEncoderValue < (manualAngle - .5)) {
-        setSpeed(.1);
-      } else {
-        setSpeed((manualAngle - elevatorEncoderValue) * .2);
+
+      if(targetSpeed < -.4) {
+        targetSpeed = -.4;
       }
+      if(targetSpeed > .1) {
+        targetSpeed = .1;
+      }
+      setSpeed(targetSpeed);
+      SmartDashboard.putNumber("Elevator Speed", targetSpeed);
     }
 
     public Command elevatorMove(double speed) {
@@ -60,7 +78,34 @@ public class RobotElevator extends SubsystemBase {
           }
       );
     }
+
+    public Command bumpPosition(boolean bumpUp) {
+      return this.runOnce(
+        () -> {
+          if(bumpUp == true) {
+            offsetUp();
+          }
+          else {
+            offsetDown();
+          }
+        }
+      );
+    }
   
+    public void offsetUp() {
+      angleOffset += 1;
+      if (angleOffset > 5) {
+        angleOffset = 5;
+      }
+    }
+
+    public void offsetDown() {
+      angleOffset -= 1;
+      if (angleOffset < -5) {
+        angleOffset = -5;
+      }
+    }
+
     public void setSpeed(double speed) {
       elevatorWheel.set(speed);
     }
@@ -69,13 +114,26 @@ public class RobotElevator extends SubsystemBase {
       elevatorWheel.set(0);
     }
 
-    public void getEncoderValue() {
+    public void doNothing(){
 
+    }
+
+    public void setPosition(double position) {
+      SmartDashboard.putNumber("Elevator Point", position);
+      targetPosition = position;
+    }
+
+    public boolean inPosition() {
+      return Math.abs(targetPosition - elevatorEncoderValue) < .5;
     }
 
   @Override public void periodic() {
     elevatorEncoderValue = elevatorEncoder.getPosition();
     SmartDashboard.putNumber("Elevator Encoder", elevatorEncoderValue);
-    // SmartDashboard.putNumber("Elevator Absolute Encoder", angleEncoder.get());
+
+    isAuto = SmartDashboard.getBoolean("AutoMode", false);
+
+ 
+    
   }
 }

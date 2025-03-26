@@ -25,25 +25,29 @@ public class RobotAlgaePivot extends SubsystemBase {
 
   private double algaeCurrentPosition;
 
+  private double targetPosition;
+
   public RobotAlgaePivot() {
     final int pivotWheelDeviceID = 13;
     pivotWheel = new SparkMax(pivotWheelDeviceID, MotorType.kBrushless);
     configWheel = new SparkMaxConfig();
-    configWheel.smartCurrentLimit(10);
+    configWheel.smartCurrentLimit(20);
     pivotWheel.configure(configWheel, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     pivotEncoder = pivotWheel.getEncoder();
     }
 
     public Command pivotPositionSet(double algaePivotPoint) {
-      return this.run(
+      return this.runEnd(
         () -> {
-          coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
-          algaeCurrentPosition = SmartDashboard.getNumber("Algae Pivot Encoder", 0);
+          // System.out.println("Algae pivotPositionSet Test");
           if(coralCurrentPosition > -600) {
             SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
-          } else if((algaeCurrentPosition < -15) && (algaePivotPoint < -15)) {
+          } else if((algaeCurrentPosition < -9) && (algaePivotPoint < -9)) {
             SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
           }
+        },
+        () -> {
+          stop();
         }
       );
     }
@@ -51,6 +55,7 @@ public class RobotAlgaePivot extends SubsystemBase {
     public Command manualPivotMove(double manualAngle) {
       return this.runEnd(
           () -> {
+            // System.out.println("Algae manualPivotMove Test");
             SmartDashboard.putNumber("Algae Pivot Point", manualAngle);
             if (pivotEncoderValue > (manualAngle + 2)) {
               setSpeed(-.2);
@@ -67,13 +72,14 @@ public class RobotAlgaePivot extends SubsystemBase {
     }
 
     public void voidPivotMove(double manualAngle) {
+      // System.out.println("Algae voidPivotMove Test");
       SmartDashboard.putNumber("Algae Pivot Point", manualAngle);
-      if (pivotEncoderValue > (manualAngle + 2)) {
+      if (pivotEncoderValue > (manualAngle + 1)) {
         setSpeed(-.2);
-      } else if (pivotEncoderValue < (manualAngle - 2)) {
+      } else if (pivotEncoderValue < (manualAngle - 1)) {
         setSpeed(.2);
       } else {
-        setSpeed((manualAngle - pivotEncoderValue) * .5);
+        setSpeed((manualAngle - pivotEncoderValue) * .2);
       }
     }
     
@@ -92,11 +98,19 @@ public class RobotAlgaePivot extends SubsystemBase {
     }
   
     public void stop() {
+      // System.out.println("Algae stop Test");
       pivotWheel.set(0);
+    }
+
+    public boolean inPosition() {
+      return Math.abs(targetPosition - algaeCurrentPosition) < 1;
     }
 
   @Override public void periodic() {
     pivotEncoderValue = pivotEncoder.getPosition();
     SmartDashboard.putNumber("Algae Pivot Encoder", pivotEncoderValue);
+    algaeCurrentPosition = SmartDashboard.getNumber("Algae Pivot Encoder", 0);
+    coralCurrentPosition = SmartDashboard.getNumber("Coral Pivot Encoder", 0);
+    targetPosition = SmartDashboard.getNumber("Algae Pivot Point", 0);
   }
 }
