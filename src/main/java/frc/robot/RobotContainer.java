@@ -179,12 +179,20 @@ public class RobotContainer {
       m_gameCommands.algaePrepCommand()
     );
 
-    operator.button(7).whileTrue(
-      m_gameCommands.lightSetCommand("blue", "left")
+    operator.button(7).and(() -> controllerMode == "Coral").whileTrue(
+      m_gameCommands.lightSetCommand("left", "white")
     );
 
-    operator.button(8).whileTrue(
-      m_gameCommands.lightSetCommand("red", "left")
+    operator.button(8).and(() -> controllerMode == "Coral").whileTrue(
+      m_gameCommands.lightSetCommand("right", "white")
+    );
+
+    operator.button(7).and(() -> controllerMode == "Algae").whileTrue(
+      m_gameCommands.lightSetCommand("left", "blue")
+    );
+
+    operator.button(8).and(() -> controllerMode == "Algae").whileTrue(
+      m_gameCommands.lightSetCommand("right", "blue")
     );
 
     operator.button(9).onTrue(

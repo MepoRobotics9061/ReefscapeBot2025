@@ -30,7 +30,7 @@ public RobotLights() {
                         m_led.setLEDs(0, 0, 0, 0, 159, 150);
 
                     } else {
-                        m_led.setLEDs(0, 150, 255, 10, 9, 150);
+                        m_led.setLEDs(0, 150, 150, 10, 9, 150);
                         m_led.setLEDs(0, 0, 0, 0, 159, 150);
                     }
 
@@ -42,7 +42,7 @@ public RobotLights() {
 
                     } else {
                         m_led.setLEDs(0, 0, 0, 0, 9, 150);
-                        m_led.setLEDs(0, 150, 255, 100, 159, 150);
+                        m_led.setLEDs(0, 150, 150, 100, 159, 150);
                     }
 
                 }

@@ -166,7 +166,7 @@ public class GameCommands /* extends SubsystemBase */{
     return new LimeLightAlgaePrepCommand(s_Swerve);
   }
 
-  public Command lightSetCommand(String color, String side) {
-    return m_robotLights.lightArea(color, side);
+  public Command lightSetCommand(String side, String color) {
+    return m_robotLights.lightArea(side, color);
   }
 }
