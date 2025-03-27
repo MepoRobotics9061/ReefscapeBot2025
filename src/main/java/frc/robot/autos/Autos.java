@@ -20,7 +20,7 @@ public class Autos {
     return Commands
       .sequence(
         m_gameCommands.elevatorMoveCommand(-7).withTimeout(1).asProxy(),
-        m_gameCommands.driveRotateUntilCommand(300).withTimeout(Constants.AutoConstants.timeSpinning),
+        m_gameCommands.driveRotateUntilCommand(() -> 300).withTimeout(Constants.AutoConstants.timeSpinning),
         m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
         m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
         m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
@@ -38,7 +38,7 @@ public class Autos {
     return Commands
       .sequence(
         m_gameCommands.elevatorMoveCommand(-7).withTimeout(1).asProxy(),
-        m_gameCommands.driveRotateUntilCommand(0).withTimeout(Constants.AutoConstants.timeSpinning),
+        m_gameCommands.driveRotateUntilCommand(() -> 0).withTimeout(Constants.AutoConstants.timeSpinning),
         m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
         m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
         m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
@@ -57,7 +57,7 @@ public Command autoCommand3() {
   return Commands
     .sequence(
       m_gameCommands.elevatorMoveCommand(-7).withTimeout(1).asProxy(),
-      m_gameCommands.driveRotateUntilCommand(60).withTimeout(Constants.AutoConstants.timeSpinning),
+      m_gameCommands.driveRotateUntilCommand(() -> 60).withTimeout(Constants.AutoConstants.timeSpinning),
       m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
       m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
       m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
@@ -75,7 +75,7 @@ public Command autoCommand3() {
 public Command autoCommandTEST() {
   return Commands
     .sequence(
-      m_gameCommands.driveRotateUntilCommand(240).withTimeout(4),
+      m_gameCommands.driveRotateUntilCommand(() -> 240).withTimeout(4),
       m_gameCommands.driveCommand(() -> -.2, () -> 0, () -> 0).withTimeout(0.5),
       m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
       m_gameCommands.elevatorMoveCommand(-10).withTimeout(3).asProxy()

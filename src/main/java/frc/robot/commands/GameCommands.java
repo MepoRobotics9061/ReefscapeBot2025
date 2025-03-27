@@ -150,8 +150,8 @@ public class GameCommands /* extends SubsystemBase */{
   //   });
   // }
 
-  public Command driveRotateUntilCommand(double angle) {
-    return new RotateUntilCommand(s_Swerve, () -> angle);
+  public Command driveRotateUntilCommand(DoubleSupplier angle) {
+    return new RotateUntilCommand(s_Swerve, () -> angle.getAsDouble());
   }
 
   public Command centerATagCommand() {
