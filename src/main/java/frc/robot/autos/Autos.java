@@ -14,7 +14,6 @@ public class Autos {
     GameCommands gameCommands
   ) {
     m_gameCommands = gameCommands;
-
   }
 
   public Command autoCommand1() {
@@ -39,7 +38,7 @@ public class Autos {
     return Commands
       .sequence(
         m_gameCommands.elevatorMoveCommand(-7).withTimeout(1).asProxy(),
-        m_gameCommands.driveRotateUntilCommand(180).withTimeout(Constants.AutoConstants.timeSpinning),
+        m_gameCommands.driveRotateUntilCommand(0).withTimeout(Constants.AutoConstants.timeSpinning),
         m_gameCommands.driveCommand(() -> Constants.AutoConstants.speedDriving, () -> 0, () -> 0).withTimeout(Constants.AutoConstants.timeForward),
         m_gameCommands.coralPrepCommand().withTimeout(Constants.AutoConstants.timeCentering),
         m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
@@ -80,8 +79,6 @@ public Command autoCommandTEST() {
       m_gameCommands.driveCommand(() -> -.2, () -> 0, () -> 0).withTimeout(0.5),
       m_gameCommands.driveCommand(() -> 0, () -> 0, () -> 0).withTimeout(0),
       m_gameCommands.elevatorMoveCommand(-10).withTimeout(3).asProxy()
-      
-  
     )
     .withName("autoCommand");
 }
