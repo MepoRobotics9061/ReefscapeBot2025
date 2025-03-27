@@ -135,9 +135,9 @@ public class GameCommands /* extends SubsystemBase */{
     System.out.println("driveCommand: RUNNING");
     return new TeleopSwerve(
         s_Swerve,
-        () -> vertical.getAsDouble(),
-        () -> horizontal.getAsDouble(),
-        () -> rotate.getAsDouble(),
+        () -> -vertical.getAsDouble(),
+        () -> -horizontal.getAsDouble(),
+        () -> -rotate.getAsDouble(),
         () -> false);
   }
 

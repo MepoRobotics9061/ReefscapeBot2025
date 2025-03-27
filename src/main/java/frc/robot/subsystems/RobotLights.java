@@ -19,30 +19,30 @@ public RobotLights() {
     m_led.configAllSettings(config);
 }
 
-    public Command lightArea(String color, String side){
+    public Command lightArea(String side, String color){
         return this.run(
             () -> {
                 m_led.setLEDs(0, 0, 0);
-                if(color == "blue"){
+                if(side == "left"){
 
-                    if(side == "left"){
-                        m_led.setLEDs(0, 0, 255, 10, 9, 150);
-                        m_led.setLEDs(255, 0, 0, 10, 159, 150);
+                    if(color == "white"){
+                        m_led.setLEDs(255, 255, 255, 100, 9, 150);
+                        m_led.setLEDs(0, 0, 0, 0, 159, 150);
 
                     } else {
-                        m_led.setLEDs(255, 0, 0, 10, 9, 150);
-                        m_led.setLEDs(0, 0, 255, 10, 159, 150);
+                        m_led.setLEDs(0, 150, 255, 10, 9, 150);
+                        m_led.setLEDs(0, 0, 0, 0, 159, 150);
                     }
 
                 } else {
 
-                    if(side == "left"){
-                        m_led.setLEDs(255, 0, 0, 10, 9, 150);
-                        m_led.setLEDs(0, 0, 255, 10, 159, 150);
+                    if(color == "white"){
+                        m_led.setLEDs(0, 0, 0, 0, 9, 150);
+                        m_led.setLEDs(255, 255, 255, 100, 159, 150);
 
                     } else {
-                        m_led.setLEDs(255, 0, 0, 10, 9, 150);
-                        m_led.setLEDs(0, 0, 255, 10, 159, 150);
+                        m_led.setLEDs(0, 0, 0, 0, 9, 150);
+                        m_led.setLEDs(0, 150, 255, 100, 159, 150);
                     }
 
                 }
