@@ -70,8 +70,8 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 4.5; // meters per second
-    public static final double maxAngularVelocity = 11.5;
+    public static final double maxSpeed = 0.7; //4.5; // meters per second
+    public static final double maxAngularVelocity = 1.5; // 11.5;
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
@@ -91,7 +91,7 @@ public final class Constants {
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 0;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(137.7);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(129.7);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -121,7 +121,7 @@ public final class Constants {
       public static final int driveMotorID = 6;
       public static final int angleMotorID = 5;
       public static final int canCoderID = 2;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(329.3);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(147.0);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -141,5 +141,24 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+      public static final double gyroAngle = 0;
+      public static final double elevatorPoint = 0;
+      public static final double coralPivotPoint = 0;
+      public static final double algaePivotPoint = 0;
+      public static final double timeSpinning = 2;
+      public static final double timeForward = 1;
+      public static final double timeCentering = 5;
+      public static final double timeEleMoving = 1;
+      public static final double timePivoting = 1;
+      public static final double timeLaunching = 1;
+      public static final double timeIntaking = 1;
+      public static final double speedDriving = -.5;
+      public static final double speedLaunching = .5;
+      public static final double speedIntaking = .5;
+      public static final double positionEleTop = -95;
+      public static final double positionEleBottom = -5;
+      public static final double positionCoralPivot = -825;
+      public static final double positionAlgaePivot = -20;
   }
 }

@@ -1,20 +1,31 @@
 package frc.robot.subsystems;
 
-
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.BooleanSupplier;
 
 public class RobotAlgae extends SubsystemBase {
 
   SparkMax wheel;
 
+  private SparkMaxConfig configWheel;
+
+  private DigitalInput limitSwitch;
+
   public RobotAlgae() {
-    final int wheelDeviceID = 11;
-    wheel = new SparkMax(wheelDeviceID, MotorType.kBrushless);
+    final int wheelDeviceID = 14;
+    wheel = new SparkMax(wheelDeviceID, MotorType.kBrushed);
+    configWheel = new SparkMaxConfig();
+    configWheel.smartCurrentLimit(40);
+    configWheel.idleMode(IdleMode.kBrake);
+    wheel.configure(configWheel, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    limitSwitch = new DigitalInput(6);
   }
 
   public Command launch(double speed) {
@@ -31,7 +42,11 @@ public class RobotAlgae extends SubsystemBase {
   public Command intake(double speed) {
     return this.runEnd(
         () -> {
-          setWheelSpeed(speed);
+          // if(limitSwitch.get() == false) {
+            setWheelSpeed(speed);
+          // } else {
+          //   stop();
+          // }
         },
         () -> {
           stop();
@@ -46,4 +61,5 @@ public class RobotAlgae extends SubsystemBase {
   public void stop() {
     wheel.set(0);
   }
+
 }

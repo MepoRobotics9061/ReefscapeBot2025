@@ -9,21 +9,24 @@ import frc.robot.subsystems.Swerve;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-public class AutonomousSwerve extends Command {
+public class TeleopSwerveLimit extends Command {
   private Swerve s_Swerve;
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
   private DoubleSupplier rotationSup;
   private BooleanSupplier robotCentricSup;
-  private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
-  private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
-  private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
+  private DoubleSupplier speedSup;
 
-  public AutonomousSwerve(
+  private SlewRateLimiter translationLimiter = new SlewRateLimiter(4.5);
+  private SlewRateLimiter strafeLimiter = new SlewRateLimiter(4.5);
+  private SlewRateLimiter rotationLimiter = new SlewRateLimiter(4.5);
+
+  public TeleopSwerveLimit(
       Swerve s_Swerve,
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
+      DoubleSupplier speedSup,
       BooleanSupplier robotCentricSup) {
     this.s_Swerve = s_Swerve;
     addRequirements(s_Swerve);
@@ -32,11 +35,15 @@ public class AutonomousSwerve extends Command {
     this.strafeSup = strafeSup;
     this.rotationSup = rotationSup;
     this.robotCentricSup = robotCentricSup;
+    this.speedSup = speedSup;
   }
 
   @Override
   public void execute() {
     /* Get Values, Deadband*/
+
+    double speedMult = ((speedSup.getAsDouble()+1.0) / 3.0)+ 0.33;
+
     double translationVal =
         translationLimiter.calculate(
           MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.Swerve.stickDeadband));
@@ -47,11 +54,18 @@ public class AutonomousSwerve extends Command {
         rotationLimiter.calculate(
             MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
 
+ 
+
     /* Drive */
-    // s_Swerve.driveCommand(
-    //     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-    //     rotationVal * Constants.Swerve.maxAngularVelocity,
-    //     robotCentricSup.getAsBoolean(),
-    //     true);
+    s_Swerve.drive(
+        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed * speedMult),
+        rotationVal * Constants.Swerve.maxAngularVelocity * speedMult,
+        robotCentricSup.getAsBoolean(),
+        true);
   }
+
+  // @Override
+  // public Command zeroGyroCommand(){
+  //   return this.run(() -> {gyro.zeroYaw();});
+  // }
 }

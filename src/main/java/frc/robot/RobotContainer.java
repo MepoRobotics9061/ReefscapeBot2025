@@ -6,19 +6,30 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.autos.exampleAuto;
+import frc.robot.autos.Autos;
 import frc.robot.commands.LimeLightCenterATagCommand;
 import frc.robot.commands.GameCommands;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TeleopSwerveLimit;
 import frc.robot.subsystems.RobotAlgae;
 import frc.robot.subsystems.RobotCamera;
 import frc.robot.subsystems.RobotCoral;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.RobotCoralPivot;
+import frc.robot.subsystems.RobotAlgaePivot;
 import frc.robot.subsystems.RobotElevator;
+import frc.robot.subsystems.RobotLights;
 import frc.robot.subsystems.RobotCamera;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -33,10 +44,12 @@ public class RobotContainer {
   /* Controllers */
   private final CommandJoystick driver = new CommandJoystick(0);
 
-  private final GameCommands m_gameCommands;
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   /* Subsystems */
   private final RobotAlgae m_robotAlgae = new RobotAlgae();
+
+  private final RobotAlgaePivot m_robotAlgaePivot = new RobotAlgaePivot();
 
   private final RobotCoral m_robotCoral = new RobotCoral();
 
@@ -46,32 +59,86 @@ public class RobotContainer {
 
   private final RobotCamera m_robotCamera = new RobotCamera();
 
-  private final Swerve s_Swerve = new Swerve(m_robotCamera);
+  private final RobotLights m_robotLights = new RobotLights();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  private final Swerve s_Swerve = new Swerve(m_robotCamera); 
+  
+  /* Commands */
+  
+  private final GameCommands m_gameCommands;
+  private final Autos m_autos;
+  private final SendableChooser<Command> m_autoChooser;
+
+  String controllerMode = SmartDashboard.getString("Controller Mode", "Coral");
+
+  Boolean isAuto = false;
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     m_gameCommands = new GameCommands(
-        m_robotAlgae,
-        m_robotCoral,
-        m_robotCoralPivot,
-        m_robotElevator,
-        s_Swerve,
-        m_robotCamera);
+      m_robotAlgae,
+      m_robotAlgaePivot,
+      m_robotCamera,
+      m_robotCoral,
+      m_robotCoralPivot,
+      m_robotElevator,
+      m_robotLights,
+      s_Swerve
+    );
+
+    m_autos = new Autos(
+      m_gameCommands, m_robotElevator, m_robotCoralPivot, m_robotAlgaePivot
+    );
+
+    m_autoChooser = new SendableChooser<Command>();
+
+    // s_Swerve.setDefaultCommand(
+    
+    //   new TeleopSwerve(
+    //     s_Swerve,
+    //     () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
+    //     () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
+    //     () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
+    //     () -> true));
 
     s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
-            () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
-            () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
-            // () -> robotCentric.get()));
-            () -> false));
+    
+    new TeleopSwerveLimit(
+      s_Swerve,
+      () -> driver.getRawAxis(1) * driver.getRawAxis(1) * driver.getRawAxis(1),
+      () -> driver.getRawAxis(0) * driver.getRawAxis(0) * driver.getRawAxis(0),
+      () -> driver.getRawAxis(2) * driver.getRawAxis(2) * driver.getRawAxis(2) * .5,
+      () -> -driver.getRawAxis(3) ,
+      () -> true));
+
+
+
+    m_robotCoralPivot.setDefaultCommand(
+      new RunCommand(
+        () -> m_robotCoralPivot.voidPivotMove(() -> SmartDashboard.getNumber("Coral Pivot Point",-50)), 
+        m_robotCoralPivot
+      )
+    );
+
+
+    m_robotAlgaePivot.setDefaultCommand(
+      new RunCommand(
+        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", -2)), 
+        m_robotAlgaePivot
+      )
+    );
+
+    m_robotElevator.setDefaultCommand(
+      new RunCommand(
+        () -> m_robotElevator.voidElevatorMove(SmartDashboard.getNumber("Elevator Point", -4)), 
+        m_robotElevator
+      )
+    );
 
     // Configure the button bindings
     configureButtonBindings();
+    configureAutos();
   }
 
   /**
@@ -87,31 +154,202 @@ public class RobotContainer {
 
     // zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    driver.button(8).whileTrue(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> .5,
-            () -> 0,
-            () -> 0,
-            () -> false));
+    driver.button(3).onTrue(
+      new InstantCommand(() -> s_Swerve.zeroGyro())
+    );
 
-    driver.button(5).whileTrue(
-        m_gameCommands.runCoralIntakeCommand(1));
+    /*  XBox:
+          5, 6 [Bumpers] = Intake
+          Trigger = Fire
+          1, 2, 3, 4 [A, B, X, Y] = (Coral)/(Algae) Pivots
+          9 [Left Stick]= Toggle Pivots
+          POV [D-Pad] = (Elevator)/(Half Elevator)
+          10 [Right Stick] = Toggle Elevator
+          7, 8 [Select and Start]= Lights
 
-    driver.button(1).whileTrue(
-        m_gameCommands.runCoralLaunchCommand(1));
-
-    driver.button(6).whileTrue(
-        m_gameCommands.runAlgaeIntakeCommand(1));
-
-    driver.button(2).whileTrue(
-        m_gameCommands.runAlgaeLaunchCommand(1));
+        Joystick:
+          7 = Center A Tag
+          9 = Reef A Tag
+          11 = Processor A Tag
+        */
 
     driver.button(7).whileTrue(
         m_gameCommands.centerATagCommand());
 
-    driver.button(9).whileTrue(
-        m_gameCommands.coralPrepCommand());
+    driver.button(9).and(() -> controllerMode == "Coral").whileTrue(
+      m_gameCommands.coralPrepCommand()
+    );
+
+    driver.button(9).and(() -> controllerMode == "Algae").whileTrue(
+      m_gameCommands.algaePrepCommand()
+    );
+
+    driver.button(11).whileTrue(
+        m_robotCoralPivot.manualResetEncoder()
+      );
+
+    operator.button(7).and(() -> controllerMode == "Coral").whileTrue(
+      m_gameCommands.lightSetCommand("left", "white")
+    );
+
+    operator.button(8).and(() -> controllerMode == "Coral").whileTrue(
+      m_gameCommands.lightSetCommand("right", "white")
+    );
+
+    operator.button(7).and(() -> controllerMode == "Algae").whileTrue(
+      m_gameCommands.lightSetCommand("left", "blue")
+    );
+
+    operator.button(8).and(() -> controllerMode == "Algae").whileTrue(
+      m_gameCommands.lightSetCommand("right", "blue")
+    );
+
+    operator.button(9).onTrue(
+      Commands
+      .sequence(
+        new InstantCommand(() -> setMode("Coral")),
+     //   m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
+        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition).asProxy(),
+        m_robotLights.lightArea("left", "white"),
+        m_robotLights.lightArea("right", "white")        
+      )
+    );
+
+    operator.button(10).onTrue(
+      Commands
+      .sequence(
+        new InstantCommand(() -> setMode("Algae")),
+      //  m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
+        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition).asProxy(),
+        m_robotLights.lightArea("left", "blue"),
+        m_robotLights.lightArea("right", "blue")   
+      )
+    );
+
+      // operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -825)
+      //   //m_gameCommands.manualCoralPivotMove(-700)
+      //   //m_robotCoralPivot.testingSpeed(-.1)
+      // );
+
+      // operator.button(3).and(() -> controllerMode == "Coral").whileTrue(
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -675)
+      //    //m_gameCommands.manualCoralPivotMove(-500)
+      //   // m_robotCoralPivot.testingSpeed(.1)
+      // );
+
+      operator.button(4).and(() -> controllerMode == "Coral").whileTrue(
+        m_gameCommands.coralPivotPositionSetCommand(() -> -400)
+         //m_gameCommands.manualCoralPivotMove(-500)
+        // m_robotCoralPivot.testingSpeed(.1)
+      );
+
+      operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
+        //m_gameCommands.coralPivotPositionSetCommand(() -> -100)
+         //m_gameCommands.manualCoralPivotMove(-100)
+         m_robotCoralPivot.testingSpeed(-.2)
+      );
+
+      // operator.button(2).and(() -> controllerMode == "Coral").whileTrue(
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -100)
+      //    //m_gameCommands.manualCoralPivotMove(-100)
+      // );
+
+       operator.button(2).and(() -> controllerMode == "Coral").whileTrue(
+        //m_gameCommands.coralPivotPositionSetCommand(() -> -100)
+         //m_gameCommands.manualCoralPivotMove(-100)
+         m_robotCoralPivot.testingSpeed(.2)
+      );
+
+      // operator.button(1).onTrue(
+      //   m_gameCommands.algaePivotPositionSetCommand(-1)
+         //m_robotAlgaePivot.testingSpeed(-.1)
+      //);
+
+      operator.povDown().and(() -> controllerMode == "Coral").onTrue(
+        m_gameCommands.elevatorMoveCommand(-5)
+      );
+
+      operator.povLeft().and(() -> controllerMode == "Coral").onTrue(
+        m_gameCommands.elevatorMoveCommand(-35)
+      );
+
+      
+
+      operator.povUp().and(() -> controllerMode == "Coral").onTrue(
+        m_gameCommands.elevatorMoveCommand(-95)
+      );
+
+      operator.leftTrigger().and(() -> controllerMode == "Coral").whileTrue(
+        m_gameCommands.runCoralIntakeCommand(.5)
+      );
+
+      operator.rightTrigger().and(() -> controllerMode == "Coral").whileTrue(
+        m_gameCommands.runCoralLaunchCommand(.5)
+      );
+
+      // operator.rightTrigger().and(() -> controllerMode == "Coral").onTrue(
+      //  new SequentialCommandGroup(
+      //   m_gameCommands.runCoralLaunchCommand(.5).withTimeout(1),
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -50).withTimeout(2),
+      //   m_gameCommands.elevatorMoveCommand(-5)
+      //  )
+      // );
+
+      operator.leftBumper().onTrue(
+      //  //m_robotElevator.bumpPosition(false)
+        new InstantCommand(() -> elevatorOffsetUp())
+      );
+
+      operator.rightBumper().onTrue(
+     //   //m_robotElevator.bumpPosition(true)
+        new InstantCommand(() -> elevatorOffsetDown())
+      );
+
+      operator.button(1).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(() -> -22)
+        //m_robotAlgaePivot.testingSpeed(-.1)
+      );
+
+      operator.button(3).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(() -> -9)
+      );
+
+      operator.button(4).and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.algaePivotPositionSetCommand(() -> -1)
+        //m_robotAlgaePivot.testingSpeed(.1)
+      );
+
+      operator.povDown().and(() -> controllerMode == "Algae").onTrue(
+        m_gameCommands.elevatorMoveCommand(-6)
+      );
+
+      operator.povLeft().and(() -> controllerMode == "Algae").onTrue(
+        m_gameCommands.elevatorMoveCommand(-45)
+      );
+
+      operator.povUp().and(() -> controllerMode == "Algae").onTrue(
+        m_gameCommands.elevatorMoveCommand(-75)
+      );
+
+      operator.leftTrigger().and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.runAlgaeIntakeCommand(0.5)
+      );
+
+      operator.rightTrigger().and(() -> controllerMode == "Algae").whileTrue(
+        m_gameCommands.runAlgaeLaunchCommand(0.5)
+      );
+    }
+
+  private void configureAutos() {
+    m_autoChooser.addOption("1", m_autos.autoCommand1());
+    m_autoChooser.addOption("2", m_autos.autoCommand2());
+    m_autoChooser.addOption("3", m_autos.autoCommand3());
+    m_autoChooser.addOption("TEST", m_autos.autoCommandTEST());
+
+    m_autoChooser.setDefaultOption("2", m_autos.autoCommand2());
+
+    SmartDashboard.putData("AutoCommand", m_autoChooser);
   }
 
   /**
@@ -120,21 +358,19 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new exampleAuto(s_Swerve);
-    // return DriveCommands.driveOne(
-    // s_Swerve,
-    // () -> .3,
-    // () -> 0,
-    // () -> 0,
-    // () -> true)
-    // .withTimeout(5)
-    // .andThen(DriveCommands.driveOne(
-    // s_Swerve,
-    // () -> -.3,
-    // () -> 0,
-    // () -> 0,
-    // () -> true));
+    return m_autoChooser.getSelected();
+  }
+
+  public void setMode(String mode){
+    controllerMode = mode;
+    SmartDashboard.putString("Controller Mode", mode);
+  }
+  
+  public void elevatorOffsetUp(){
+    m_robotElevator.offsetUp();
+  }
+  public void elevatorOffsetDown(){
+    m_robotElevator.offsetDown();
   }
 
 }

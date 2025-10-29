@@ -28,7 +28,6 @@ import frc.lib.math.OnboardModuleState;
 //import frc.lib.util.CANCoderUtil.CCUsage;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 public class SwerveModule {
   public int moduleNumber;

@@ -4,7 +4,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RobotCamera extends SubsystemBase {
@@ -13,6 +12,7 @@ public class RobotCamera extends SubsystemBase {
   double tagY;
   double tagArea;
   double tagID;
+  
   double spinAmount;
   double gyro;
   String teamCol;
@@ -21,6 +21,9 @@ public class RobotCamera extends SubsystemBase {
   NetworkTableEntry ty;
   NetworkTableEntry ta;
   NetworkTableEntry tid;
+  
+
+  double tagIDSave = -1;
 
 
   public RobotCamera() {
@@ -41,16 +44,24 @@ public class RobotCamera extends SubsystemBase {
     ty = table.getEntry("ty");
     ta = table.getEntry("ta");
     tid = table.getEntry("tid");
+   
 
     tagX = tx.getDouble(0.0);
     tagY = ty.getDouble(0.0);
     tagArea = ta.getDouble(0.0);
     tagID = tid.getDouble(0.0);
+    
+
+    if (tagID != -1){
+      tagIDSave = tagID;
+    } else {
+      tagID = tagIDSave;}
 
     SmartDashboard.putNumber("Tag X", tagX);
     SmartDashboard.putNumber("Tag Y", tagY);
     SmartDashboard.putNumber("Tag Area", tagArea);
     SmartDashboard.putNumber("Tag ID", tagID);
+   
 
     teamCol = SmartDashboard.getString("Team Color", "r");
 
@@ -58,57 +69,95 @@ public class RobotCamera extends SubsystemBase {
 
     SmartDashboard.putString("Team Color", teamCol);
 
-    if (tagID == 1 || tagID == 9 || tagID == 19) {
-      if (teamCol == "r") {
-        spinAmount = 225;
-      } else {
+    if (tagID == 1) {
+    
         spinAmount = 45;
-      }
-    } else if (tagID == 2 || tagID == 11 || tagID == 17) {
-      if (teamCol == "r") {
-        spinAmount = 135;
-      } else {
+      
+    } else if (tagID == 2) {
+     
         spinAmount = 315;
-      }
+     
     } else if (tagID == 3) {
-      if (teamCol == "r") {
-        spinAmount = 90;
-      } else {
+      
         spinAmount = 270;
-      }
-    } else if (tagID == 4 || tagID == 5 || tagID == 7 || tagID == 21) {
-      if (teamCol == "r") {
-        spinAmount = 0;
-      } else {
+      
+    } else if (tagID == 4 || tagID == 5 || tagID == 7 ) {
+     
         spinAmount = 180;
-      }
-    } else if (tagID == 6 || tagID == 13 || tagID == 22) {
-      if (teamCol == "r") {
-        spinAmount = 45;
-      } else {
-        spinAmount = 225;
-      }
-    } else if (tagID == 8 || tagID == 12 || tagID == 20) {
-      if (teamCol == "r") {
+      
+    }  else if ( tagID == 21) {
+  
+        spinAmount = 0;
+     
+    }  else if (tagID == 6  ) {
+      
+        spinAmount = 240;
+     
+    }else if (tagID == 22) {
+      
+        spinAmount = 60;
+     
+    }
+    
+    else if (tagID == 8 ) {
+   
+        spinAmount = 120;
+     
+    } 
+    else if (tagID == 12 ) {
+   
+      spinAmount = 315;
+   
+  } 
+    else if (tagID == 20) {
+     
+        spinAmount = 300;
+      
+    } 
+    else if (tagID == 10 ) { 
+        spinAmount = 0;  
+    } 
+    else if (tagID == 14 || tagID == 15 || tagID == 18) {
+     
+        spinAmount = 180;
+    
+    } 
+
+    else if (tagID == 9  ) {
+     
+        spinAmount = 60;
+   
+    } 
+    else if (tagID == 19) {
+      
+        spinAmount = 240;
+      
+    } 
+    else if (tagID == 11 ) {
+      
+        spinAmount = 300;
+      
+    } 
+    else if ( tagID == 17) {
+      
+        spinAmount = 120;
+      
+    } 
+    else if (tagID == 12) {
+     
         spinAmount = 315;
-      } else {
-        spinAmount = 135;
-      }
-    } else if (tagID == 10 || tagID == 14 || tagID == 15 || tagID == 18) {
-      if (teamCol == "r") {
-        spinAmount = 180;
-      } else {
-        spinAmount = 0;
-      }
+      
+    } else if (tagID == 13) {
+     
+        spinAmount = 45;
+      
     } else if (tagID == 16) {
-        if (teamCol == "r") {
+       
           spinAmount = 270;
-        } else {
-          spinAmount = 90;
-        }
+        
       //Used only for our April Tag (#42)
     } else if (tagID == 42) {
-      spinAmount = 90;
+      spinAmount = 0;
     }
 
     SmartDashboard.putNumber("Spin Amount", spinAmount);
