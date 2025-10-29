@@ -70,80 +70,94 @@ public class RobotCamera extends SubsystemBase {
     SmartDashboard.putString("Team Color", teamCol);
 
     if (tagID == 1) {
-      if (teamCol == "r") {
-        spinAmount = 225;
-      } else {
+    
         spinAmount = 45;
-      }
+      
     } else if (tagID == 2) {
-      if (teamCol == "r") {
-        spinAmount = 135;
-      } else {
+     
         spinAmount = 315;
-      }
+     
     } else if (tagID == 3) {
-      if (teamCol == "r") {
-        spinAmount = 90;
-      } else {
+      
         spinAmount = 270;
-      }
-    } else if (tagID == 4 || tagID == 5 || tagID == 7 || tagID == 21) {
-      if (teamCol == "r") {
-        spinAmount = 0;
-      } else {
+      
+    } else if (tagID == 4 || tagID == 5 || tagID == 7 ) {
+     
         spinAmount = 180;
-      }
-    } else if (tagID == 6 || tagID == 13 || tagID == 22) {
-      if (teamCol == "r") {
-        spinAmount = 60;
-      } else {
+      
+    }  else if ( tagID == 21) {
+  
+        spinAmount = 0;
+     
+    }  else if (tagID == 6  ) {
+      
         spinAmount = 240;
-      }
-    } else if (tagID == 8 || tagID == 12 || tagID == 20) {
-      if (teamCol == "r") {
-        spinAmount = 300;
-      } else {
+     
+    }else if (tagID == 22) {
+      
+        spinAmount = 60;
+     
+    }
+    
+    else if (tagID == 8 ) {
+   
         spinAmount = 120;
-      }
-    } else if (tagID == 10 || tagID == 14 || tagID == 15 || tagID == 18) {
-      if (teamCol == "r") {
+     
+    } 
+    else if (tagID == 12 ) {
+   
+      spinAmount = 315;
+   
+  } 
+    else if (tagID == 20) {
+     
+        spinAmount = 300;
+      
+    } 
+    else if (tagID == 10 ) { 
+        spinAmount = 0;  
+    } 
+    else if (tagID == 14 || tagID == 15 || tagID == 18) {
+     
         spinAmount = 180;
-      } else {
-        spinAmount = 0;
-      }
-    } else if (tagID == 9 || tagID == 19) {
-      if (teamCol == "r") {
+    
+    } 
+
+    else if (tagID == 9  ) {
+     
         spinAmount = 60;
-      } else {
+   
+    } 
+    else if (tagID == 19) {
+      
         spinAmount = 240;
-      }
-    } else if (tagID == 11 || tagID == 17) {
-      if (teamCol == "r") {
-        spinAmount = 240;
-      } else {
-        spinAmount = 60;
-      }
-    } else if (tagID == 12) {
-      if (teamCol == "r"){
+      
+    } 
+    else if (tagID == 11 ) {
+      
+        spinAmount = 300;
+      
+    } 
+    else if ( tagID == 17) {
+      
+        spinAmount = 120;
+      
+    } 
+    else if (tagID == 12) {
+     
         spinAmount = 315;
-      } else {
-        spinAmount = 135;
-      }
+      
     } else if (tagID == 13) {
-      if (teamCol == "r"){
+     
         spinAmount = 45;
-      } else {
-        spinAmount = 225;
-      }
+      
     } else if (tagID == 16) {
-        if (teamCol == "r") {
+       
           spinAmount = 270;
-        } else {
-          spinAmount = 90;
-        }
+        
       //Used only for our April Tag (#42)
     } else if (tagID == 42) {
-      spinAmount = 90;
+      spinAmount = 0;
     }
 
     SmartDashboard.putNumber("Spin Amount", spinAmount);

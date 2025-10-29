@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.security.cert.X509CRL;
+import java.util.function.DoubleSupplier;
 public class RobotCoralPivot extends SubsystemBase {
 
   SparkMax pivotWheel;
@@ -31,19 +32,20 @@ public class RobotCoralPivot extends SubsystemBase {
     pivotEncoder = pivotWheel.getEncoder();
     }
 
-    public Command pivotPositionSet(double coralPivotPoint) {
+    public Command pivotPositionSet(DoubleSupplier coralPivotPoint) {
       return this.runEnd(
         () -> {
-          // System.out.println("Coral pivotPositionSet Test");
+          //System.out.println("Coral pivotPositionSet Test");
           if(algaeCurrentPosition < -12) {
-            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
+            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint.getAsDouble());
           } else if(algaeCurrentPosition > -6){
-            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
+            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint.getAsDouble());
           } else if(algaeCurrentPosition < -9){
-            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
-          } else if(coralPivotPoint > -600 && coralCurrentPosition > -600) {
-            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint);
+            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint.getAsDouble());
+          } else if(coralPivotPoint.getAsDouble() > -600 && coralCurrentPosition > -600) {
+            SmartDashboard.putNumber("Coral Pivot Point", coralPivotPoint.getAsDouble());
           }
+          voidPivotMove(() -> SmartDashboard.getNumber("Coral Pivot Point",-100));
         },
         () -> {
           stop();
@@ -69,23 +71,42 @@ public class RobotCoralPivot extends SubsystemBase {
           }
         );
     }
+
+    public Command manualResetEncoder(){
+      return this.runEnd(
+        () ->{setSpeed(.2);},
+        () ->{resetEncoder();}
+      );
+    }
   
-    public void voidPivotMove(double manualAngle) {
-      SmartDashboard.putNumber("Coral Pivot Point", manualAngle);
-       System.out.println("Coral voidPivotMove Test");
-      if (pivotEncoderValue > (manualAngle + 15)) {
-        setSpeed(-.2);
-      } else if (pivotEncoderValue < (manualAngle - 15)) {
-        setSpeed(.2);
-      } else {
-        setSpeed((manualAngle - pivotEncoderValue) * .005);
+    public void voidPivotMove(DoubleSupplier manualAngle) {
+      SmartDashboard.putNumber("Coral Pivot Point", manualAngle.getAsDouble());
+      //  System.out.println("Coral voidPivotMove Test");
+      double targetSpeed = (manualAngle.getAsDouble() - pivotEncoderValue) * .005;
+
+      if (targetSpeed > 0.19) {
+        targetSpeed = 0.19;
       }
+      if (targetSpeed < -0.16) {
+        targetSpeed = -0.16;
+      }
+
+      // if (pivotEncoderValue > (manualAngle.getAsDouble() + 15)) {
+      //   setSpeed(-.15);
+      // } else if (pivotEncoderValue < (manualAngle.getAsDouble() - 15)) {
+      //   setSpeed(.15);
+      // } else {
+      //   setSpeed((manualAngle.getAsDouble() - pivotEncoderValue) * .005);
+      // }
+
+      setSpeed(targetSpeed);
     }
 
     public Command testingSpeed(double speed) {
       return this.runEnd(
         () -> {
           setSpeed(speed);
+          SmartDashboard.putNumber("Coral Pivot Point",pivotEncoderValue);
         }, () -> {
           stop();
         }
@@ -94,6 +115,10 @@ public class RobotCoralPivot extends SubsystemBase {
   
     public void setSpeed(double speed) {
       pivotWheel.set(speed);
+    }
+
+    public void resetEncoder(){
+      pivotEncoder.setPosition(0.0);
     }
   
     public void stop() {

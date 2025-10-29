@@ -10,6 +10,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
 
 public class RobotAlgaePivot extends SubsystemBase {
 
@@ -36,14 +37,14 @@ public class RobotAlgaePivot extends SubsystemBase {
     pivotEncoder = pivotWheel.getEncoder();
     }
 
-    public Command pivotPositionSet(double algaePivotPoint) {
+    public Command pivotPositionSet(DoubleSupplier algaePivotPoint) {
       return this.runEnd(
         () -> {
           // System.out.println("Algae pivotPositionSet Test");
           if(coralCurrentPosition > -600) {
-            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
-          } else if((algaeCurrentPosition < -9) && (algaePivotPoint < -9)) {
-            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint);
+            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint.getAsDouble());
+          } else if((algaeCurrentPosition < -9) && (algaePivotPoint.getAsDouble() < -9)) {
+            SmartDashboard.putNumber("Algae Pivot Point", algaePivotPoint.getAsDouble());
           }
         },
         () -> {

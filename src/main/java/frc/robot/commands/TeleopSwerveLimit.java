@@ -17,9 +17,9 @@ public class TeleopSwerveLimit extends Command {
   private BooleanSupplier robotCentricSup;
   private DoubleSupplier speedSup;
 
-  private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
-  private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
-  private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
+  private SlewRateLimiter translationLimiter = new SlewRateLimiter(4.5);
+  private SlewRateLimiter strafeLimiter = new SlewRateLimiter(4.5);
+  private SlewRateLimiter rotationLimiter = new SlewRateLimiter(4.5);
 
   public TeleopSwerveLimit(
       Swerve s_Swerve,

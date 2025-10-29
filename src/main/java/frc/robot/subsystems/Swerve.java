@@ -81,13 +81,26 @@ public class Swerve extends SubsystemBase {
   }
 
   public void centerATagVoid() {
-    drive(new Translation2d(0, m_robotCamera.tagX / 20), gyroATagSpinAmount, false, true);
+    drive(new Translation2d(0, m_robotCamera.tagX / 40), gyroATagSpinAmount, false, true);
   }
 
   public void coralPrepVoid() {
     if (m_robotCamera.tagArea != 0) {
     //  drive(new Translation2d(-(10 - m_robotCamera.tagArea) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2 ,
-      drive(new Translation2d(-(15.5 - tagDistance) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2 ,
+    var xSp = 0.0;
+    xSp = (15.5 - tagDistance) / 120;
+    if (xSp > 0.12) { xSp = 0.12;}
+    if (xSp < -0.12) { xSp = -0.12;}
+    System.out.println(xSp);
+
+    var sideSp = 0.0;
+    sideSp = m_robotCamera.tagX / 120;
+    if (sideSp > 0.1) { sideSp = 0.1;}
+    if (sideSp < -0.1) { sideSp = -0.1;}
+    System.out.println("side");
+    System.out.println(sideSp);
+
+    drive(new Translation2d(xSp, sideSp), gyroATagSpinAmount / 2 ,
       false, true);
     }
   }
@@ -95,7 +108,12 @@ public class Swerve extends SubsystemBase {
   public void algaePrepVoid() {
     if (m_robotCamera.tagArea != 0) {
      // drive(new Translation2d(-(14 - m_robotCamera.tagArea) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2,
-      drive(new Translation2d(-(13.5 - tagDistance) / 20, m_robotCamera.tagX / 40), gyroATagSpinAmount / 2, 
+     var xSp = 0.0;
+     xSp = (15.5 - tagDistance) / 120;
+     if (xSp > 0.1) { xSp = 0.1;}
+     if (xSp < -0.1) { xSp = -0.1;}
+    
+     drive(new Translation2d(xSp, m_robotCamera.tagX / 120), gyroATagSpinAmount / 2, 
       false, true);
     }
   }
@@ -216,7 +234,7 @@ public class Swerve extends SubsystemBase {
       errorAmount += 360;
     }
 
-    gyroATagSpinAmount = (errorAmount) / 15;
+    gyroATagSpinAmount = (errorAmount) / 30;
 
     if ((.05 < gyroATagSpinAmount) && (gyroATagSpinAmount < .2)) {
       gyroATagSpinAmount = .2;
@@ -226,12 +244,12 @@ public class Swerve extends SubsystemBase {
       gyroATagSpinAmount = -.2;
     }
 
-    if (gyroATagSpinAmount > 4) {
-      gyroATagSpinAmount = 4;
+    if (gyroATagSpinAmount > 2) {
+      gyroATagSpinAmount = 2;
     }
 
-    if (gyroATagSpinAmount < -4) {
-      gyroATagSpinAmount = -4;
+    if (gyroATagSpinAmount < -2) {
+      gyroATagSpinAmount = -2;
     }
 
   }

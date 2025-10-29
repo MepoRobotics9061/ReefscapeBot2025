@@ -58,11 +58,11 @@ public class RobotElevator extends SubsystemBase {
       double targetSpeed = (manualAngle - elevatorEncoderValue) * .2 + gainSpeed;
       SmartDashboard.putNumber("Elevator Point", manualAngle);
 
-      if(targetSpeed < -.4) {
-        targetSpeed = -.4;
+      if(targetSpeed < -.5) {
+        targetSpeed = -.5;
       }
-      if(targetSpeed > .1) {
-        targetSpeed = .1;
+      if(targetSpeed > .2) {
+        targetSpeed = .2;
       }
       setSpeed(targetSpeed);
       SmartDashboard.putNumber("Elevator Speed", targetSpeed);

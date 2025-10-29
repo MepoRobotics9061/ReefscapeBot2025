@@ -91,7 +91,7 @@ public final class Constants {
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 0;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(137.7);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(129.7);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -121,7 +121,7 @@ public final class Constants {
       public static final int driveMotorID = 6;
       public static final int angleMotorID = 5;
       public static final int canCoderID = 2;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(13.0);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(147.0);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -147,8 +147,8 @@ public final class Constants {
       public static final double coralPivotPoint = 0;
       public static final double algaePivotPoint = 0;
       public static final double timeSpinning = 2;
-      public static final double timeForward = 0;
-      public static final double timeCentering = 1;
+      public static final double timeForward = 1;
+      public static final double timeCentering = 5;
       public static final double timeEleMoving = 1;
       public static final double timePivoting = 1;
       public static final double timeLaunching = 1;

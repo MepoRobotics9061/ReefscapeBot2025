@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.Autos;
 import frc.robot.commands.LimeLightCenterATagCommand;
@@ -84,7 +85,7 @@ public class RobotContainer {
     );
 
     m_autos = new Autos(
-      m_gameCommands
+      m_gameCommands, m_robotElevator, m_robotCoralPivot, m_robotAlgaePivot
     );
 
     m_autoChooser = new SendableChooser<Command>();
@@ -112,7 +113,7 @@ public class RobotContainer {
 
     m_robotCoralPivot.setDefaultCommand(
       new RunCommand(
-        () -> m_robotCoralPivot.voidPivotMove(SmartDashboard.getNumber("Coral Pivot Point", -100)), 
+        () -> m_robotCoralPivot.voidPivotMove(() -> SmartDashboard.getNumber("Coral Pivot Point",-50)), 
         m_robotCoralPivot
       )
     );
@@ -120,7 +121,7 @@ public class RobotContainer {
 
     m_robotAlgaePivot.setDefaultCommand(
       new RunCommand(
-        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", -3)), 
+        () -> m_robotAlgaePivot.voidPivotMove(SmartDashboard.getNumber("Algae Pivot Point", -2)), 
         m_robotAlgaePivot
       )
     );
@@ -179,6 +180,10 @@ public class RobotContainer {
       m_gameCommands.algaePrepCommand()
     );
 
+    driver.button(11).whileTrue(
+        m_robotCoralPivot.manualResetEncoder()
+      );
+
     operator.button(7).and(() -> controllerMode == "Coral").whileTrue(
       m_gameCommands.lightSetCommand("left", "white")
     );
@@ -199,8 +204,10 @@ public class RobotContainer {
       Commands
       .sequence(
         new InstantCommand(() -> setMode("Coral")),
-        m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
-        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition)
+     //   m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
+        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition).asProxy(),
+        m_robotLights.lightArea("left", "white"),
+        m_robotLights.lightArea("right", "white")        
       )
     );
 
@@ -208,32 +215,46 @@ public class RobotContainer {
       Commands
       .sequence(
         new InstantCommand(() -> setMode("Algae")),
-        m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
-        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition)
+      //  m_robotCoralPivot.manualPivotMove(-50).until(m_robotCoralPivot::inPosition).asProxy(),
+        m_robotAlgaePivot.manualPivotMove(-1).until(m_robotAlgaePivot::inPosition).asProxy(),
+        m_robotLights.lightArea("left", "blue"),
+        m_robotLights.lightArea("right", "blue")   
       )
     );
 
-      operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-825)
-        //m_gameCommands.manualCoralPivotMove(-700)
-        //m_robotCoralPivot.testingSpeed(-.1)
-      );
+      // operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -825)
+      //   //m_gameCommands.manualCoralPivotMove(-700)
+      //   //m_robotCoralPivot.testingSpeed(-.1)
+      // );
 
-      operator.button(3).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-675)
-         //m_gameCommands.manualCoralPivotMove(-500)
-        // m_robotCoralPivot.testingSpeed(.1)
-      );
+      // operator.button(3).and(() -> controllerMode == "Coral").whileTrue(
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -675)
+      //    //m_gameCommands.manualCoralPivotMove(-500)
+      //   // m_robotCoralPivot.testingSpeed(.1)
+      // );
 
       operator.button(4).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-400)
+        m_gameCommands.coralPivotPositionSetCommand(() -> -400)
          //m_gameCommands.manualCoralPivotMove(-500)
         // m_robotCoralPivot.testingSpeed(.1)
       );
 
-      operator.button(2).and(() -> controllerMode == "Coral").whileTrue(
-        m_gameCommands.coralPivotPositionSetCommand(-50)
+      operator.button(1).and(() -> controllerMode == "Coral").whileTrue(
+        //m_gameCommands.coralPivotPositionSetCommand(() -> -100)
          //m_gameCommands.manualCoralPivotMove(-100)
+         m_robotCoralPivot.testingSpeed(-.2)
+      );
+
+      // operator.button(2).and(() -> controllerMode == "Coral").whileTrue(
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -100)
+      //    //m_gameCommands.manualCoralPivotMove(-100)
+      // );
+
+       operator.button(2).and(() -> controllerMode == "Coral").whileTrue(
+        //m_gameCommands.coralPivotPositionSetCommand(() -> -100)
+         //m_gameCommands.manualCoralPivotMove(-100)
+         m_robotCoralPivot.testingSpeed(.2)
       );
 
       // operator.button(1).onTrue(
@@ -249,6 +270,8 @@ public class RobotContainer {
         m_gameCommands.elevatorMoveCommand(-35)
       );
 
+      
+
       operator.povUp().and(() -> controllerMode == "Coral").onTrue(
         m_gameCommands.elevatorMoveCommand(-95)
       );
@@ -261,6 +284,14 @@ public class RobotContainer {
         m_gameCommands.runCoralLaunchCommand(.5)
       );
 
+      // operator.rightTrigger().and(() -> controllerMode == "Coral").onTrue(
+      //  new SequentialCommandGroup(
+      //   m_gameCommands.runCoralLaunchCommand(.5).withTimeout(1),
+      //   m_gameCommands.coralPivotPositionSetCommand(() -> -50).withTimeout(2),
+      //   m_gameCommands.elevatorMoveCommand(-5)
+      //  )
+      // );
+
       operator.leftBumper().onTrue(
       //  //m_robotElevator.bumpPosition(false)
         new InstantCommand(() -> elevatorOffsetUp())
@@ -272,16 +303,16 @@ public class RobotContainer {
       );
 
       operator.button(1).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-22)
+        m_gameCommands.algaePivotPositionSetCommand(() -> -22)
         //m_robotAlgaePivot.testingSpeed(-.1)
       );
 
       operator.button(3).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-9)
+        m_gameCommands.algaePivotPositionSetCommand(() -> -9)
       );
 
       operator.button(4).and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.algaePivotPositionSetCommand(-1)
+        m_gameCommands.algaePivotPositionSetCommand(() -> -1)
         //m_robotAlgaePivot.testingSpeed(.1)
       );
 
@@ -298,11 +329,11 @@ public class RobotContainer {
       );
 
       operator.leftTrigger().and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.runAlgaeIntakeCommand(1)
+        m_gameCommands.runAlgaeIntakeCommand(0.5)
       );
 
       operator.rightTrigger().and(() -> controllerMode == "Algae").whileTrue(
-        m_gameCommands.runAlgaeLaunchCommand(1)
+        m_gameCommands.runAlgaeLaunchCommand(0.5)
       );
     }
 

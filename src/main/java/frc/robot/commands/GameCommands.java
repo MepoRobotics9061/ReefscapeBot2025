@@ -78,6 +78,8 @@ public class GameCommands /* extends SubsystemBase */{
     return m_robotCoral.intake(speed);
   }
 
+
+
   public Command runCoralLaunchCommand(double speed) {
     System.out.println("runCoralLaunchCommand: RUNNING");
     return m_robotCoral.launch(speed);
@@ -103,12 +105,12 @@ public class GameCommands /* extends SubsystemBase */{
     return m_robotAlgaePivot.manualPivotMove(desiredValue);
   }
 
-  public Command coralPivotPositionSetCommand(double pivotPoint) {
+  public Command coralPivotPositionSetCommand(DoubleSupplier pivotPoint) {
     System.out.println("coralPivotPositionSetCommand: RUNNING");
     return m_robotCoralPivot.pivotPositionSet(pivotPoint);
   }
 
-  public Command algaePivotPositionSetCommand(double pivotPoint) {
+  public Command algaePivotPositionSetCommand(DoubleSupplier pivotPoint) {
     System.out.println("algaePivotPositionSetCommand: RUNNING");
     return m_robotAlgaePivot.pivotPositionSet(pivotPoint);
   }
