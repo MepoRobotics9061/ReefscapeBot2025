@@ -18,7 +18,7 @@ public class RobotCoral extends SubsystemBase {
   public RobotCoral() {
     final int leftWheelDeviceID = 11;
     final int rightWheelDeviceID = 12;
-    leftWheel = new SparkMax(leftWheelDeviceID, MotorType.kBrushed);
+    leftWheel = new SparkMax(leftWheelDeviceID, MotorType.kBrushless);
     rightWheel = new SparkMax(rightWheelDeviceID, MotorType.kBrushed);
 
     limitSwitch = new DigitalInput(5);
@@ -52,7 +52,7 @@ public class RobotCoral extends SubsystemBase {
   }
 
   public void setWheelSpeed(double speed) {
-    leftWheel.set(speed);
+    leftWheel.set(speed*.5);
     rightWheel.set(-speed);
   }
 
