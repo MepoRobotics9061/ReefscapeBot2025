@@ -52,8 +52,8 @@ public class RobotCoral extends SubsystemBase {
   }
 
   public void setWheelSpeed(double speed) {
-    leftWheel.set(speed*.2);
-    rightWheel.set(-speed);
+    leftWheel.set(speed);
+    rightWheel.set(-speed*.2);
   }
 
   public void stop() {
